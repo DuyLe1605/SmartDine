@@ -1,5 +1,5 @@
 import envConfig from "@/config";
-import { normalizePath } from "@/lib/utils";
+import { clearToken, normalizePath, saveAccessTokenToLS, saveRefreshTokenToLS } from "@/lib/utils";
 import { LoginResType } from "@/schemaValidations/auth.schema";
 import { redirect } from "next/navigation";
 
@@ -111,8 +111,7 @@ const request = async <Response>(
                         await clientLogoutRequest;
                     } catch (error) {
                     } finally {
-                        localStorage.removeItem("accessToken");
-                        localStorage.removeItem("refreshToken");
+                        clearToken();
                         clientLogoutRequest = null;
                         // Redirect về trang login có thể dẫn đến loop vô hạn
                         // Nếu không không được xử lý đúng cách
@@ -134,11 +133,10 @@ const request = async <Response>(
         const normalizeUrl = normalizePath(url);
         if (normalizeUrl === "api/auth/login") {
             const { accessToken, refreshToken } = (payload as LoginResType).data;
-            localStorage.setItem("accessToken", accessToken);
-            localStorage.setItem("refreshToken", refreshToken);
+            saveAccessTokenToLS(accessToken);
+            saveRefreshTokenToLS(refreshToken);
         } else if (normalizeUrl === "api/auth/logout") {
-            localStorage.removeItem("accessToken");
-            localStorage.removeItem("refreshToken");
+            clearToken();
         }
     }
     return data;

@@ -27,7 +27,7 @@ export default function LoginForm() {
         if (loginMutation.isPending) return;
         try {
             const result = await loginMutation.mutateAsync(data);
-            router.refresh();
+
             toast(result.payload.message);
         } catch (error: any) {
             handleErrorApi({ error, setError: form.setError });

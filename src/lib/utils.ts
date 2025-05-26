@@ -42,3 +42,15 @@ const isClient = typeof window !== undefined;
 
 export const getAccessTokenFromLs = () => (isClient ? localStorage.getItem("accessToken") : null);
 export const getRefreshTokenFromLs = () => (isClient ? localStorage.getItem("refreshToken") : null);
+
+export const saveAccessTokenToLS = (accessToken: string) => {
+    localStorage.setItem("accessToken", accessToken);
+};
+export const saveRefreshTokenToLS = (refreshToken: string) => {
+    localStorage.setItem("refreshToken", refreshToken);
+};
+
+export const clearToken = () => {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+};

@@ -28,7 +28,9 @@ const menuItems = [
 
 export default function NavItems({ className }: { className?: string }) {
     const [isAuth, setIsAuth] = useState<boolean>(false);
+
     useEffect(() => {
+        console.log(getAccessTokenFromLs());
         setIsAuth(Boolean(getAccessTokenFromLs()));
     }, []);
     return menuItems.map((item) => {
