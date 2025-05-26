@@ -1,12 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useForm } from "react-hook-form";
@@ -16,9 +10,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useLoginMutation } from "@/queries/useAuth";
 import { toast } from "sonner";
 import { handleErrorApi } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
 export default function LoginForm() {
     const loginMutation = useLoginMutation();
+    const router = useRouter();
     const form = useForm<LoginBodyType>({
         resolver: zodResolver(LoginBody),
         defaultValues: {
@@ -31,6 +27,7 @@ export default function LoginForm() {
         if (loginMutation.isPending) return;
         try {
             const result = await loginMutation.mutateAsync(data);
+            router.refresh();
             toast(result.payload.message);
         } catch (error: any) {
             handleErrorApi({ error, setError: form.setError });
@@ -40,9 +37,7 @@ export default function LoginForm() {
         <Card className="mx-auto  w-100 max-w-sm">
             <CardHeader>
                 <CardTitle className="text-2xl">Đăng nhập</CardTitle>
-                <CardDescription>
-                    Nhập email và mật khẩu của bạn để đăng nhập vào hệ thống
-                </CardDescription>
+                <CardDescription>Nhập email và mật khẩu của bạn để đăng nhập vào hệ thống</CardDescription>
             </CardHeader>
             <CardContent>
                 <Form {...form}>
@@ -78,16 +73,9 @@ export default function LoginForm() {
                                     <FormItem>
                                         <div className="grid gap-2">
                                             <div className="flex items-center">
-                                                <Label htmlFor="password">
-                                                    Password
-                                                </Label>
+                                                <Label htmlFor="password">Password</Label>
                                             </div>
-                                            <Input
-                                                id="password"
-                                                type="password"
-                                                required
-                                                {...field}
-                                            />
+                                            <Input id="password" type="password" required {...field} />
                                             <FormMessage />
                                         </div>
                                     </FormItem>
@@ -96,11 +84,7 @@ export default function LoginForm() {
                             <Button type="submit" className="w-full">
                                 Đăng nhập
                             </Button>
-                            <Button
-                                variant="outline"
-                                className="w-full"
-                                type="button"
-                            >
+                            <Button variant="outline" className="w-full" type="button">
                                 Đăng nhập bằng Google
                             </Button>
                         </div>
