@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
+import AppProvider from "@/components/app-provder";
+import { Toaster } from "sonner";
 
 const roboto = Roboto({
     subsets: ["vietnamese", "latin"],
@@ -20,14 +22,17 @@ export default function RootLayout({
     return (
         <html lang="vi" suppressHydrationWarning>
             <body className={`${roboto.className} antialiased`}>
-                <ThemeProvider
-                    attribute="class"
-                    defaultTheme="system"
-                    enableSystem
-                    disableTransitionOnChange
-                >
-                    {children}
-                </ThemeProvider>
+                <AppProvider>
+                    <ThemeProvider
+                        attribute="class"
+                        defaultTheme="system"
+                        enableSystem
+                        disableTransitionOnChange
+                    >
+                        {children}
+                        <Toaster />
+                    </ThemeProvider>
+                </AppProvider>
             </body>
         </html>
     );

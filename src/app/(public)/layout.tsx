@@ -43,7 +43,7 @@ export default function Layout({
                             </span>
                         </Button>
                     </SheetTrigger>
-                    <SheetContent side="left">
+                    <SheetContent side="left" className="py-5 px-3">
                         <SheetHeader className="sr-only">
                             <SheetTitle />
                             <SheetDescription />
