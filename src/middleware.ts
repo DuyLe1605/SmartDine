@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-const protectedPaths = ["/manage"];
+const protectedPaths = ["/manage/dashboard"];
 const authPaths = ["/login"];
 
 // This function can be marked `async` if using `await` inside
@@ -16,6 +16,10 @@ export function middleware(request: NextRequest) {
 
     if (authPaths.some((path) => pathname.startsWith(path)) && isAuth) {
         return NextResponse.redirect(new URL("/", request.url));
+    }
+
+    if (pathname === "/manage" && isAuth) {
+        return NextResponse.redirect(new URL("/manage/dashboard", request.url));
     }
 
     return NextResponse.next();

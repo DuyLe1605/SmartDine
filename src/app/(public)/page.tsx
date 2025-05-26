@@ -13,19 +13,15 @@ export default function Home() {
                     alt="Banner"
                     className="absolute top-0 left-0 w-full h-full object-cover"
                 />
-                <div className="z-20 relative py-10 md:py-20 px-4 sm:px-10 md:px-20">
-                    <h1 className="text-center text-xl sm:text-2xl md:text-4xl lg:text-5xl font-bold">
+                <div className="z-20 relative py-10 md:py-20 px-4 sm:px-10 md:px-20 text-background dark:text-foreground">
+                    <h1 className="text-center text-xl sm:text-2xl md:text-4xl lg:text-5xl font-bold ">
                         Nhà hàng SmartDine
                     </h1>
-                    <p className="text-center text-sm sm:text-base mt-4">
-                        Vị ngon, trọn khoảnh khắc
-                    </p>
+                    <p className="text-center text-sm sm:text-base mt-4">Vị ngon, trọn khoảnh khắc</p>
                 </div>
             </div>
             <section className="space-y-10 py-16">
-                <h2 className="text-center text-2xl font-bold">
-                    Đa dạng các món ăn
-                </h2>
+                <h2 className="text-center text-2xl font-bold">Đa dạng các món ăn</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-10">
                     {Array(4)
                         .fill(0)
@@ -38,9 +34,7 @@ export default function Home() {
                                     />
                                 </div>
                                 <div className="space-y-1">
-                                    <h3 className="text-xl font-semibold">
-                                        Bánh mì
-                                    </h3>
+                                    <h3 className="text-xl font-semibold">Bánh mì</h3>
                                     <p className="">Bánh mì sandwidch</p>
                                     <p className="font-semibold">123,123đ</p>
                                 </div>
