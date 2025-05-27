@@ -10,32 +10,70 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useRef, useState } from "react";
-import { useAccountProfile } from "@/queries/useAccount";
+import { useAccountMe, useUpdateMeMutation } from "@/queries/useAccount";
+import { useUploadMediaMutation } from "@/queries/useMedia";
+import { handleErrorApi } from "@/lib/utils";
+import { toast } from "sonner";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function UpdateProfileForm() {
+    const queryClient = useQueryClient();
+
     const [file, setFile] = useState<File | null>(null);
     const avatarInputRef = useRef<HTMLInputElement | null>(null);
-    const { data } = useAccountProfile("update-profile", (data) => {
+    const { data } = useAccountMe("update-profile", (data) => {
         const { name, avatar } = data.data;
         console.log(data);
         form.reset({
-            avatar: avatar ?? "",
+            avatar: avatar ?? undefined,
             name: name,
         });
     });
+    const updateMeMutation = useUpdateMeMutation();
+    const uploadMediaMutation = useUploadMediaMutation();
+
     const form = useForm<UpdateMeBodyType>({
         resolver: zodResolver(UpdateMeBody),
         defaultValues: {
             name: "",
-            avatar: "",
+            // Giá trị khởi tạo avatar sẽ là undefined thay vì '' . Vì nếu để '' thì nếu avatar là null,
+            // chúng ta không upload avatar thì sẽ không cập nhật được do không vượt qua được zod schema
+            avatar: undefined,
         },
     });
     const formAvatar = form.watch("avatar");
 
     const previewAvatar = file ? URL.createObjectURL(file) : formAvatar;
+
+    const onSubmit = async (values: UpdateMeBodyType) => {
+        if (updateMeMutation.isPending) return;
+
+        try {
+            let body = values;
+            if (file) {
+                const formData = new FormData();
+                formData.append("file", file);
+                const uploadImageResult = await uploadMediaMutation.mutateAsync(formData);
+                const imageUrl = uploadImageResult.payload.data;
+                body = { ...body, avatar: imageUrl };
+            }
+
+            const updateMeResult = await updateMeMutation.mutateAsync(body);
+            // Cập nhật cả query của drop-down avatar
+            queryClient.invalidateQueries({ queryKey: ["account-me", "dropdown-avatar"] });
+            toast(updateMeResult.payload.message);
+        } catch (error) {
+            handleErrorApi({ error, setError: form.setError });
+        }
+    };
+
     return (
         <Form {...form}>
-            <form noValidate className="grid auto-rows-max items-start gap-4 md:gap-8">
+            <form
+                noValidate
+                className="grid auto-rows-max items-start gap-4 md:gap-8"
+                onSubmit={form.handleSubmit(onSubmit)}
+            >
                 <Card x-chunk="dashboard-07-chunk-0">
                     <CardHeader>
                         <CardTitle>Thông tin cá nhân</CardTitle>
@@ -65,6 +103,9 @@ export default function UpdateProfileForm() {
                                                     const file = event.target.files?.[0];
                                                     if (file) {
                                                         setFile(file);
+
+                                                        // Fake url để vượt qua zod validation, chúng ta không gửi url này lên
+                                                        field.onChange(`http://localhost:3000/${field.name}`);
                                                     }
                                                 }}
                                             />
