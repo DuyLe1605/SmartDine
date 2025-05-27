@@ -23,7 +23,7 @@ export default function UpdateProfileForm() {
     const avatarInputRef = useRef<HTMLInputElement | null>(null);
     const { data } = useAccountMe("update-profile", (data) => {
         const { name, avatar } = data.data;
-        console.log(data);
+
         form.reset({
             avatar: avatar ?? undefined,
             name: name,
