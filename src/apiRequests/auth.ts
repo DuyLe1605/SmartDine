@@ -11,6 +11,7 @@ const authApiRequest = {
             "/auth/logout",
             { refreshToken: body.refreshToken },
             {
+                // Vì backend yêu cầu phải truyền accessToken thông qua Authorization
                 headers: { Authorization: `Bearer ${body.accessToken}` },
             }
         ),

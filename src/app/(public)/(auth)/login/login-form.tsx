@@ -27,7 +27,7 @@ export default function LoginForm() {
         if (loginMutation.isPending) return;
         try {
             const result = await loginMutation.mutateAsync(data);
-            router.push("/");
+            router.push("/manage/dashboard");
 
             toast(result.payload.message);
         } catch (error: any) {
