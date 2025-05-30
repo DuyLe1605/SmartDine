@@ -19,7 +19,7 @@ import { useAccountMe } from "@/queries/useAccount";
 export default function DropdownAvatar() {
     const logoutMutation = useLogoutMutation();
     const router = useRouter();
-    const { data } = useAccountMe("dropdown-avatar");
+    const { data } = useAccountMe({ uniqueKey: "dropdown-avatar" });
     const account = data?.payload.data;
 
     const handleLogout = async () => {

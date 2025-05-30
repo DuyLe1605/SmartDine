@@ -21,13 +21,16 @@ export default function UpdateProfileForm() {
 
     const [file, setFile] = useState<File | null>(null);
     const avatarInputRef = useRef<HTMLInputElement | null>(null);
-    const { data } = useAccountMe("update-profile", (data) => {
-        const { name, avatar } = data.data;
+    const { data } = useAccountMe({
+        uniqueKey: "update-profile",
+        onSuccess: (data) => {
+            const { name, avatar } = data.data;
 
-        form.reset({
-            avatar: avatar ?? undefined,
-            name: name,
-        });
+            form.reset({
+                avatar: avatar ?? undefined,
+                name: name,
+            });
+        },
     });
     const updateMeMutation = useUpdateMeMutation();
     const uploadMediaMutation = useUploadMediaMutation();

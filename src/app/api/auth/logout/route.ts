@@ -1,6 +1,4 @@
 import authApiRequest from "@/apiRequests/auth";
-import { HttpError } from "@/lib/http";
-import { LogoutBodyType } from "@/schemaValidations/auth.schema";
 import { cookies } from "next/headers";
 
 export async function POST(request: Request) {
