@@ -45,7 +45,7 @@ export default function UpdateProfileForm() {
         },
     });
     const formAvatar = form.watch("avatar");
-
+    const name = form.watch("name");
     const previewAvatar = file ? URL.createObjectURL(file) : formAvatar;
 
     const onSubmit = async (values: UpdateMeBodyType) => {

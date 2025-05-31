@@ -7,19 +7,27 @@ const authPaths = ["/login"];
 // This function can be marked `async` if using `await` inside
 export function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;
-    const isAuth = Boolean(request.cookies.get("accessToken")?.value);
+    const accessToken = request.cookies.get("accessToken")?.value;
+    const refreshToken = request.cookies.get("refreshToken")?.value;
 
     // Chưa đăng nhập thì không cho vào protectedPaths
-    if (protectedPaths.some((path) => pathname.startsWith(path)) && !isAuth) {
+    if (protectedPaths.some((path) => pathname.startsWith(path)) && !refreshToken) {
         return NextResponse.redirect(new URL("/login", request.url));
     }
 
-    if (authPaths.some((path) => pathname.startsWith(path)) && isAuth) {
+    // Đăng nhập rồi thì không cho vào trang login
+    if (authPaths.some((path) => pathname.startsWith(path)) && refreshToken) {
         return NextResponse.redirect(new URL("/", request.url));
     }
 
-    if (pathname === "/manage" && isAuth) {
+    if (pathname === "/manage" && refreshToken) {
         return NextResponse.redirect(new URL("/manage/dashboard", request.url));
+    }
+
+    if (protectedPaths.some((path) => pathname.startsWith(path)) && !accessToken && refreshToken) {
+        const url = new URL("/logout", request.url);
+        url.searchParams.set("refreshToken", refreshToken);
+        return NextResponse.redirect(url);
     }
 
     return NextResponse.next();
