@@ -1,5 +1,6 @@
 "use client";
 
+import RefreshToken from "@/components/refresh-token";
 import { useQuery, useMutation, useQueryClient, QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
@@ -21,6 +22,7 @@ export default function AppProvider({
     return (
         // Provide the client to your App
         <QueryClientProvider client={queryClient}>
+            <RefreshToken />
             {children}
             <ReactQueryDevtools initialIsOpen={false} />
         </QueryClientProvider>
