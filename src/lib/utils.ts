@@ -38,7 +38,7 @@ export const handleErrorApi = ({
     }
 };
 
-const isClient = typeof window !== undefined;
+const isClient = typeof window !== "undefined";
 
 export const getAccessTokenFromLs = () => (isClient ? localStorage.getItem("accessToken") : null);
 export const getRefreshTokenFromLs = () => (isClient ? localStorage.getItem("refreshToken") : null);
