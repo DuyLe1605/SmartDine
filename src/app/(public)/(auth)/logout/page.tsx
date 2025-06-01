@@ -37,5 +37,5 @@ export default function LogoutPage() {
         });
     }, [mutateAsync, refreshTokenFromUrl, router]);
 
-    return <div></div>;
+    return <div className="text-center">Logout...</div>;
 }
