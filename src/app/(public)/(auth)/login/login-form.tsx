@@ -29,7 +29,7 @@ export default function LoginForm() {
             const result = await loginMutation.mutateAsync(data);
             router.push("/manage/dashboard");
 
-            toast(result.payload.message);
+            toast.success(result.payload.message);
         } catch (error: any) {
             handleErrorApi({ error, setError: form.setError });
         }

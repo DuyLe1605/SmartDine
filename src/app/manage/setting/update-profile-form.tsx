@@ -64,7 +64,7 @@ export default function UpdateProfileForm() {
             const updateMeResult = await updateMeMutation.mutateAsync(body);
             // Cập nhật cả query của drop-down avatar
             queryClient.invalidateQueries({ queryKey: ["account-me", "dropdown-avatar"] });
-            toast(updateMeResult.payload.message);
+            toast.success(updateMeResult.payload.message);
         } catch (error) {
             handleErrorApi({ error, setError: form.setError });
         }

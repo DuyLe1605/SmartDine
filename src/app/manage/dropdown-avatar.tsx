@@ -29,7 +29,7 @@ export default function DropdownAvatar() {
 
             router.push("/");
 
-            toast(result.payload.message);
+            toast.success(result.payload.message);
         } catch (error: any) {
             console.error(error);
             handleErrorApi({ error });

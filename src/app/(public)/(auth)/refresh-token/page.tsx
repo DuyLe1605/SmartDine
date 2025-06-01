@@ -1,8 +1,8 @@
 "use client";
 
-import { checkAndRefreshToken, getAccessTokenFromLs, getRefreshTokenFromLs } from "@/lib/utils";
+import { checkAndRefreshToken, getRefreshTokenFromLs } from "@/lib/utils";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 
 export default function RefreshTokenPage() {
     const searchParams = useSearchParams();

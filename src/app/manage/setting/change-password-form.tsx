@@ -35,7 +35,7 @@ export default function ChangePasswordForm() {
             saveAccessTokenToLS(accessToken);
             saveRefreshTokenToLS(refreshToken);
             form.reset();
-            toast(result.payload.message);
+            toast.success(result.payload.message);
         } catch (error) {
             handleErrorApi({ error, setError: form.setError });
         }

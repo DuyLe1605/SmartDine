@@ -1,17 +1,18 @@
 "use client";
 
 import { checkAndRefreshToken } from "@/lib/utils";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { toast } from "sonner";
 
 const UNAUTHENTICATED_PATHS = ["/login", "/register", "/refresh-token"];
 export default function RefreshToken() {
     const pathname = usePathname();
-
+    const router = useRouter();
     useEffect(() => {
         if (UNAUTHENTICATED_PATHS.includes(pathname)) return;
         let interval: any = null;
-        // const checkAndRefreshToken = async () => {
+
         //     // Không nên đưa logic lấy access và refresh token ra khỏi cái function `checkAndRefreshToken`
         //     // Vì để mỗi lần mà checkAndRefreshToken() được gọi thì chúng ta se có một access và refresh token mới
         //     // Tránh hiện tượng bug nó lấy access và refresh token cũ ở lần đầu rồi gọi cho các lần tiếp theo
@@ -60,6 +61,9 @@ export default function RefreshToken() {
                 checkAndRefreshToken({
                     onError: () => {
                         clearInterval(interval);
+
+                        router.push("/login");
+                        toast.error("refreshToken hết hạn, vui lòng đăng nhập lại !", { duration: 4000 });
                     },
                 }),
             TIMEOUT
