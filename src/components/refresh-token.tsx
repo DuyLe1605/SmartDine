@@ -51,6 +51,8 @@ export default function RefreshToken() {
         checkAndRefreshToken({
             onError: () => {
                 clearInterval(interval);
+                toast.error("refreshToken hết hạn, vui lòng đăng nhập lại !", { duration: 4000 });
+                router.push("/login");
             },
         });
         // Timeout interval phải bé hơn thời gian hết hạn của access token
@@ -61,9 +63,8 @@ export default function RefreshToken() {
                 checkAndRefreshToken({
                     onError: () => {
                         clearInterval(interval);
-
-                        router.push("/login");
                         toast.error("refreshToken hết hạn, vui lòng đăng nhập lại !", { duration: 4000 });
+                        router.push("/login");
                     },
                 }),
             TIMEOUT

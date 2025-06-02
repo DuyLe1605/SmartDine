@@ -75,6 +75,7 @@ export const checkAndRefreshToken = async (params?: { onError?: () => void; onSu
     // Không cần xóa trong cookie vì nó sẽ tự xóa sau khi hết hạn
     if (decodedRefreshToken.exp <= now) {
         clearTokensFormLS();
+
         return params?.onError && params.onError();
     }
     // Ví dụ access token của chúng ta có thời gian hết hạn là 10s

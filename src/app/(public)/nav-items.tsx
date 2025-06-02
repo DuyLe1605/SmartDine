@@ -1,8 +1,7 @@
 "use client";
 
-import { getAccessTokenFromLs } from "@/lib/utils";
+import useAppStore from "@/zustand/useAppStore";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 
 const menuItems = [
     {
@@ -27,11 +26,8 @@ const menuItems = [
 ];
 
 export default function NavItems({ className }: { className?: string }) {
-    const [isAuth, setIsAuth] = useState<boolean>(false);
-
-    useEffect(() => {
-        setIsAuth(Boolean(getAccessTokenFromLs()));
-    }, []);
+    const isAuth = useAppStore((state) => state.isAuth);
+    console.log(isAuth);
     return menuItems.map((item) => {
         if ((item.authRequired === true && !isAuth) || (item.authRequired === false && isAuth)) return null;
         return (

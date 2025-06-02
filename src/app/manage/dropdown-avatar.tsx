@@ -15,18 +15,19 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { handleErrorApi } from "@/lib/utils";
 import { useAccountMe } from "@/queries/useAccount";
+import useAppStore from "@/zustand/useAppStore";
 
 export default function DropdownAvatar() {
     const logoutMutation = useLogoutMutation();
     const router = useRouter();
     const { data } = useAccountMe({ uniqueKey: "dropdown-avatar" });
     const account = data?.payload.data;
-
+    const setIsAuth = useAppStore((state) => state.setIsAuth);
     const handleLogout = async () => {
         if (logoutMutation.isPending) return;
         try {
             const result = await logoutMutation.mutateAsync();
-
+            setIsAuth(false);
             router.push("/");
 
             toast.success(result.payload.message);
