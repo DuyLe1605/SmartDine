@@ -37,7 +37,7 @@ export const useGetAccount = ({ id }: { id: number }) =>
 
 export const useAddAccountMutation = () => {
     const queryClient = useQueryClient();
-    useMutation({
+    return useMutation({
         mutationFn: accountApiRequest.addEmployee,
         onSuccess: () => {
             queryClient.invalidateQueries({
@@ -48,7 +48,7 @@ export const useAddAccountMutation = () => {
 };
 export const useUpdateEmployee = () => {
     const queryClient = useQueryClient();
-    useMutation({
+    return useMutation({
         mutationFn: ({ id, ...body }: { id: number } & UpdateEmployeeAccountBodyType) =>
             accountApiRequest.updateEmployee(id, body),
         onSuccess: () => {
@@ -60,7 +60,7 @@ export const useUpdateEmployee = () => {
 };
 export const useDeleteEmployee = () => {
     const queryClient = useQueryClient();
-    useMutation({
+    return useMutation({
         mutationFn: accountApiRequest.deleteEmployee,
         onSuccess: () => {
             queryClient.invalidateQueries({
