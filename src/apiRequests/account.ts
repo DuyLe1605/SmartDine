@@ -1,8 +1,15 @@
 import http from "@/lib/http";
 import {
+    AccountIdParamType,
+    AccountListResType,
     AccountResType,
     ChangePasswordV2BodyType,
     ChangePasswordV2ResType,
+    CreateEmployeeAccountBodyType,
+    CreateGuestBodyType,
+    CreateGuestResType,
+    GetListGuestsResType,
+    UpdateEmployeeAccountBodyType,
     UpdateMeBodyType,
 } from "@/schemaValidations/account.schema";
 
@@ -16,6 +23,13 @@ const accountApiRequest = {
         http.put<ChangePasswordV2ResType>(`${prefix}/change-password-v2`, body, {
             headers: { Authorization: `Bearer ${accessToken}` },
         }),
+    list: () => http.get<AccountListResType>(`${prefix}`),
+    addEmployee: (body: CreateEmployeeAccountBodyType) => http.post<AccountResType>(prefix, body),
+    getEmployee: (id: AccountIdParamType["id"]) => http.get<AccountResType>(`${prefix}/detail/${id}`),
+    updateEmployee: (id: AccountIdParamType["id"], body: UpdateEmployeeAccountBodyType) =>
+        http.put<AccountResType>(`${prefix}/detail/${id}`, body),
+    deleteEmployee: (id: AccountIdParamType["id"]) => http.delete<AccountResType>(`${prefix}/detail/${id}`),
+    addGuest: (body: CreateGuestBodyType) => http.post<CreateGuestResType>(`${prefix}/guests`, body),
 };
 
 export default accountApiRequest;
