@@ -3,9 +3,9 @@
 import { getAccessTokenFromLs, getRefreshTokenFromLs } from "@/lib/utils";
 import { useLogoutMutation } from "@/queries/useAuth";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { Suspense, useEffect, useRef } from "react";
 
-export default function LogoutPage() {
+function Logout() {
     const { mutateAsync } = useLogoutMutation();
     const searchParams = useSearchParams();
     const router = useRouter();
@@ -36,6 +36,13 @@ export default function LogoutPage() {
             router.push("/login");
         });
     }, [mutateAsync, refreshTokenFromUrl, router]);
+    return null;
+}
 
-    return <div className="text-center">Logout...</div>;
+export default function LogoutPage() {
+    return (
+        <Suspense fallback={<div className="text-center">Logout...</div>}>
+            <Logout />
+        </Suspense>
+    );
 }

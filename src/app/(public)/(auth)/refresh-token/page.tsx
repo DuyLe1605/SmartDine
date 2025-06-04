@@ -2,9 +2,9 @@
 
 import { checkAndRefreshToken, getRefreshTokenFromLs } from "@/lib/utils";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 
-export default function RefreshTokenPage() {
+function RefreshToken() {
     const searchParams = useSearchParams();
     const router = useRouter();
 
@@ -22,4 +22,12 @@ export default function RefreshTokenPage() {
     }, [refreshTokenFromUrl, router]);
 
     return <div className="text-center">Refreshing Token...</div>;
+}
+
+export default function RefreshTokenPage() {
+    return (
+        <Suspense>
+            <RefreshToken />
+        </Suspense>
+    );
 }
