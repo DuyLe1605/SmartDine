@@ -13,12 +13,16 @@ import { Label } from "@/components/ui/label";
 import { UpdateEmployeeAccountBody, UpdateEmployeeAccountBodyType } from "@/schemaValidations/account.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Upload } from "lucide-react";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Switch } from "@/components/ui/switch";
 import { Role } from "@/constants/type";
+import { useGetAccount, useUpdateEmployee } from "@/queries/useAccount";
+import { useUploadMediaMutation } from "@/queries/useMedia";
+import { toast } from "sonner";
+import { handleErrorApi } from "@/lib/utils";
 
 export default function EditEmployee({
     id,
@@ -43,22 +47,67 @@ export default function EditEmployee({
             role: Role.Employee,
         },
     });
+    // queries
+    const { data } = useGetAccount({ id: id as number });
+    const updateEmployeeMutation = useUpdateEmployee();
+    const uploadMediaMutation = useUploadMediaMutation();
+
     const avatar = form.watch("avatar");
     const name = form.watch("name");
     const changePassword = form.watch("changePassword");
-    const previewAvatarFromFile = useMemo(() => {
-        if (file) {
-            return URL.createObjectURL(file);
+    const previewAvatarFromFile = file ? URL.createObjectURL(file) : avatar;
+    useEffect(() => {
+        if (data) {
+            const { name, email, avatar } = data.payload.data;
+            form.reset({
+                name,
+                email,
+                avatar: avatar ?? undefined,
+                password: form.getValues("password"),
+                confirmPassword: form.getValues("confirmPassword"),
+                changePassword: form.getValues("changePassword"),
+                role: form.getValues("role"),
+            });
         }
-        return avatar;
-    }, [file, avatar]);
+    }, [data, form]);
 
+    // Func
+    const reset = () => {
+        setFile(null);
+        setId(undefined);
+    };
+    const onSubmit = async (values: UpdateEmployeeAccountBodyType) => {
+        // Tránh trường hợp chưa gọi api xong mà bị gọi tiếp
+        if (updateEmployeeMutation.isPending) return;
+
+        try {
+            let body: UpdateEmployeeAccountBodyType & { id: number } = { id: id as number, ...values };
+            // Trường hợp có tải lên avatar người dùng
+            if (file) {
+                const formData = new FormData();
+                formData.append("file", file);
+                const uploadImageResult = await uploadMediaMutation.mutateAsync(formData);
+                const imageUrl = uploadImageResult.payload.data;
+                body = { ...body, avatar: imageUrl };
+            }
+
+            const res = await updateEmployeeMutation.mutateAsync(body);
+
+            toast.success(res.payload.message);
+
+            onSubmitSuccess && onSubmitSuccess();
+        } catch (error) {
+            handleErrorApi({ error, setError: form.setError });
+        }
+    };
+    console.log("ava", avatar);
+    console.log("previe", previewAvatarFromFile);
     return (
         <Dialog
             open={Boolean(id)}
             onOpenChange={(value) => {
                 if (!value) {
-                    setId(undefined);
+                    reset();
                 }
             }}
         >
@@ -68,7 +117,12 @@ export default function EditEmployee({
                     <DialogDescription>Các trường tên, email, mật khẩu là bắt buộc</DialogDescription>
                 </DialogHeader>
                 <Form {...form}>
-                    <form noValidate className="grid auto-rows-max items-start gap-4 md:gap-8" id="edit-employee-form">
+                    <form
+                        noValidate
+                        className="grid auto-rows-max items-start gap-4 md:gap-8"
+                        id="edit-employee-form"
+                        onSubmit={form.handleSubmit(onSubmit, (error) => console.log(error))}
+                    >
                         <div className="grid gap-4 py-4">
                             <FormField
                                 control={form.control}
