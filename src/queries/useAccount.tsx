@@ -1,9 +1,5 @@
 import accountApiRequest from "@/apiRequests/account";
-import {
-    AccountResType,
-    CreateEmployeeAccountBodyType,
-    UpdateEmployeeAccountBodyType,
-} from "@/schemaValidations/account.schema";
+import { AccountResType, UpdateEmployeeAccountBodyType } from "@/schemaValidations/account.schema";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 // Truyền thêm unique key để có thể tránh caching
