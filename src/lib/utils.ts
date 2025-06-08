@@ -12,6 +12,18 @@ export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
 }
 
+export const generateAvatarName = (name: string | undefined, fallbackName?: string) => {
+    return name
+        ? name
+              .trim()
+              .split(" ")
+              .slice(-3)
+              .map((word) => word.slice(0, 1))
+              .join("")
+              .toUpperCase()
+        : fallbackName;
+};
+
 /**
  * Xóa đi ký tự `/` đầu tiên của path
  */

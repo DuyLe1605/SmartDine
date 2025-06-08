@@ -19,14 +19,13 @@ import { useForm } from "react-hook-form";
 import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useAddAccountMutation } from "@/queries/useAccount";
-import { handleErrorApi } from "@/lib/utils";
+import { generateAvatarName, handleErrorApi } from "@/lib/utils";
 import { useUploadMediaMutation } from "@/queries/useMedia";
 import { toast } from "sonner";
 
 export default function AddEmployee() {
     const [file, setFile] = useState<File | null>(null);
     const [open, setOpen] = useState(false);
-
 
     const avatarInputRef = useRef<HTMLInputElement | null>(null);
     const form = useForm<CreateEmployeeAccountBodyType>({
@@ -51,10 +50,10 @@ export default function AddEmployee() {
         return avatar;
     }, [file, avatar]);
 
-    const reset=()=>{
-        form.reset()
-        setFile(null)
-    }
+    const reset = () => {
+        form.reset();
+        setFile(null);
+    };
     const onSubmit = async (values: CreateEmployeeAccountBodyType) => {
         // Tránh trường hợp chưa gọi api xong mà bị gọi tiếp
         if (addAccountMutation.isPending) return;
@@ -72,7 +71,7 @@ export default function AddEmployee() {
 
             const res = await addAccountMutation.mutateAsync(body);
             reset();
-            setOpen(false)
+            setOpen(false);
 
             toast.success(res.payload.message);
         } catch (error) {
@@ -81,7 +80,7 @@ export default function AddEmployee() {
     };
 
     return (
-        <Dialog onOpenChange={setOpen} open={open} >
+        <Dialog onOpenChange={setOpen} open={open}>
             <DialogTrigger asChild>
                 <Button size="sm" className="h-7 gap-1">
                     <PlusCircle className="h-3.5 w-3.5" />
@@ -100,7 +99,6 @@ export default function AddEmployee() {
                         id="add-employee-form"
                         onSubmit={form.handleSubmit(onSubmit)}
                         onReset={reset}
-
                     >
                         <div className="grid gap-4 py-4">
                             <FormField
@@ -112,13 +110,7 @@ export default function AddEmployee() {
                                             <Avatar className="aspect-square w-[100px] h-[100px] rounded-md object-cover">
                                                 <AvatarImage src={previewAvatarFromFile} />
                                                 <AvatarFallback className="rounded-none">
-                                                    {name
-                                                        .trim()
-                                                        .split(" ")
-                                                        .slice(-2)
-                                                        .map((word) => word.slice(0, 1))
-                                                        .join("")
-                                                        .toUpperCase() || "Avatar"}
+                                                    {(generateAvatarName(name), "Avatar")}
                                                 </AvatarFallback>
                                             </Avatar>
                                             <input

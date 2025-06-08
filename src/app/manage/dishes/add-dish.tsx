@@ -9,7 +9,7 @@ import { useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { getVietnameseDishStatus, handleErrorApi } from "@/lib/utils";
+import { generateAvatarName, getVietnameseDishStatus, handleErrorApi } from "@/lib/utils";
 import { CreateDishBody, CreateDishBodyType } from "@/schemaValidations/dish.schema";
 import { DishStatus, DishStatusValues } from "@/constants/type";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -91,6 +91,9 @@ export default function AddDish() {
                         id="add-dish-form"
                         onSubmit={form.handleSubmit(onSubmit, (error) => {
                             console.log(error);
+                            if ("image" in error) {
+                                toast("Hãy tải lên hình ảnh món ăn !");
+                            }
                         })}
                     >
                         <div className="grid gap-4 py-4">
@@ -103,7 +106,7 @@ export default function AddDish() {
                                             <Avatar className="aspect-square w-[100px] h-[100px] rounded-md object-cover">
                                                 <AvatarImage src={previewAvatarFromFile} />
                                                 <AvatarFallback className="rounded-none">
-                                                    {name || "Ảnh Món ăn"}
+                                                    {(generateAvatarName(name), "Ảnh Món ăn")}
                                                 </AvatarFallback>
                                             </Avatar>
                                             <input

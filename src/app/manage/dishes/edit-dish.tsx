@@ -22,6 +22,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { UpdateDishBody, UpdateDishBodyType } from "@/schemaValidations/dish.schema";
 import { DishStatus, DishStatusValues } from "@/constants/type";
 import { Textarea } from "@/components/ui/textarea";
+import { useGetDish, useUpdateDishMutation } from "@/queries/useDish";
+import { useUploadMediaMutation } from "@/queries/useMedia";
+import { toast } from "sonner";
 
 export default function EditDish({
     id,
@@ -44,14 +47,47 @@ export default function EditDish({
             status: DishStatus.Unavailable,
         },
     });
+    // Queries
+    const { data } = useGetDish({ id: id as number });
+    const updateDishMutation = useUpdateDishMutation();
+    const uploadMediaMutation = useUploadMediaMutation();
+
     const image = form.watch("image");
     const name = form.watch("name");
-    const previewAvatarFromFile = useMemo(() => {
-        if (file) {
-            return URL.createObjectURL(file);
+    const previewAvatarFromFile = file ? URL.createObjectURL(file) : image;
+
+    useEffect(() => {
+        if (data) {
+            const { name, description, image, price, status } = data.payload.data;
+            form.reset({ name, description, price, image, status });
         }
-        return image;
-    }, [file, image]);
+    }, [data, form]);
+
+    const reset = () => {
+        setFile(null);
+        setId(undefined);
+    };
+    const onSubmit = async (values: UpdateDishBodyType) => {
+        if (updateDishMutation.isPending) return;
+
+        try {
+            let body: UpdateDishBodyType & { id: number } = { id: id as number, ...values };
+            if (file) {
+                const formData = new FormData();
+                formData.append("file", file);
+                const uploadImageResult = await uploadMediaMutation.mutateAsync(formData);
+                const imageUrl = uploadImageResult.payload.data;
+                body = { ...body, image: imageUrl };
+            }
+
+            const res = await updateDishMutation.mutateAsync(body);
+            reset();
+            onSubmitSuccess && onSubmitSuccess();
+            toast.success(res.payload.message);
+        } catch (error) {
+            handleErrorApi({ error, setError: form.setError });
+        }
+    };
     return (
         <Dialog
             open={Boolean(id)}
@@ -64,10 +100,15 @@ export default function EditDish({
             <DialogContent className="sm:max-w-[600px] max-h-screen overflow-auto">
                 <DialogHeader>
                     <DialogTitle>Cập nhật món ăn</DialogTitle>
-                    <DialogDescription>Các trường sau đây là bắ buộc: Tên, ảnh</DialogDescription>
+                    <DialogDescription>Các trường sau đây là bắt buộc: Tên, ảnh</DialogDescription>
                 </DialogHeader>
                 <Form {...form}>
-                    <form noValidate className="grid auto-rows-max items-start gap-4 md:gap-8" id="edit-dish-form">
+                    <form
+                        noValidate
+                        className="grid auto-rows-max items-start gap-4 md:gap-8"
+                        id="edit-dish-form"
+                        onSubmit={form.handleSubmit(onSubmit)}
+                    >
                         <div className="grid gap-4 py-4">
                             <FormField
                                 control={form.control}
@@ -78,7 +119,7 @@ export default function EditDish({
                                             <Avatar className="aspect-square w-[100px] h-[100px] rounded-md object-cover">
                                                 <AvatarImage src={previewAvatarFromFile} />
                                                 <AvatarFallback className="rounded-none">
-                                                    {name || "Avatar"}
+                                                    {name || "Ảnh món ăn"}
                                                 </AvatarFallback>
                                             </Avatar>
                                             <input

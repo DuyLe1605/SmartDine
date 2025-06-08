@@ -12,7 +12,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useRef, useState } from "react";
 import { useAccountMe, useUpdateMeMutation } from "@/queries/useAccount";
 import { useUploadMediaMutation } from "@/queries/useMedia";
-import { handleErrorApi } from "@/lib/utils";
+import { generateAvatarName, handleErrorApi } from "@/lib/utils";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -45,6 +45,7 @@ export default function UpdateProfileForm() {
         },
     });
     const formAvatar = form.watch("avatar");
+    const formName = form.watch("name");
 
     const previewAvatar = file ? URL.createObjectURL(file) : formAvatar;
 
@@ -93,7 +94,7 @@ export default function UpdateProfileForm() {
                                                 <AvatarImage src={previewAvatar} />
                                                 <AvatarFallback className="rounded-none ">
                                                     <span className="font-bold text-shadow-zinc-50 text-shadow-xs">
-                                                        Avatar
+                                                        {generateAvatarName(formName, "Avatar")}
                                                     </span>
                                                 </AvatarFallback>
                                             </Avatar>

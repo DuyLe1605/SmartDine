@@ -13,7 +13,7 @@ import Link from "next/link";
 import { useLogoutMutation } from "@/queries/useAuth";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { handleErrorApi } from "@/lib/utils";
+import { generateAvatarName, handleErrorApi } from "@/lib/utils";
 import { useAccountMe } from "@/queries/useAccount";
 import useAppStore from "@/zustand/useAppStore";
 
@@ -42,14 +42,7 @@ export default function DropdownAvatar() {
                 <Button variant="outline" size="icon" className="overflow-hidden rounded-full">
                     <Avatar>
                         <AvatarImage src={account?.avatar ?? undefined} alt={account?.name} />
-                        <AvatarFallback>
-                            {account?.name
-                                .split(" ")
-                                .slice(-2)
-                                .map((word) => word.slice(0, 1))
-                                .join("")
-                                .toUpperCase()}
-                        </AvatarFallback>
+                        <AvatarFallback>{generateAvatarName(account?.name, "Avatar")}</AvatarFallback>
                     </Avatar>
                 </Button>
             </DropdownMenuTrigger>

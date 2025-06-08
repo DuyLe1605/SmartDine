@@ -19,7 +19,7 @@ export const useAddDishMutation = () => {
     });
 };
 
-export const useEditDishMutation = () => {
+export const useUpdateDishMutation = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: ({ id, ...body }: { id: number } & UpdateDishBodyType) => dishApiRequest.editDish(id, body),

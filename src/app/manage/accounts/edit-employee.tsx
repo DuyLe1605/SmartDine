@@ -22,7 +22,7 @@ import { Role } from "@/constants/type";
 import { useGetAccount, useUpdateEmployee } from "@/queries/useAccount";
 import { useUploadMediaMutation } from "@/queries/useMedia";
 import { toast } from "sonner";
-import { handleErrorApi } from "@/lib/utils";
+import { generateAvatarName, handleErrorApi } from "@/lib/utils";
 
 export default function EditEmployee({
     id,
@@ -132,7 +132,7 @@ export default function EditEmployee({
                                             <Avatar className="aspect-square w-[100px] h-[100px] rounded-md object-cover">
                                                 <AvatarImage src={previewAvatarFromFile} />
                                                 <AvatarFallback className="rounded-none">
-                                                    {name || "Avatar"}
+                                                    {(generateAvatarName(name), "Avatar")}
                                                 </AvatarFallback>
                                             </Avatar>
                                             <input
