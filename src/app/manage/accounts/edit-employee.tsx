@@ -94,14 +94,13 @@ export default function EditEmployee({
             const res = await updateEmployeeMutation.mutateAsync(body);
 
             toast.success(res.payload.message);
-
+            reset();
             onSubmitSuccess && onSubmitSuccess();
         } catch (error) {
             handleErrorApi({ error, setError: form.setError });
         }
     };
-    console.log("ava", avatar);
-    console.log("previe", previewAvatarFromFile);
+
     return (
         <Dialog
             open={Boolean(id)}
