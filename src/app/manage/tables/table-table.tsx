@@ -36,14 +36,15 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { getTableLink, getVietnameseTableStatus } from "@/lib/utils";
+import { getTableLink, getVietnameseTableStatus, handleErrorApi } from "@/lib/utils";
 import { useSearchParams } from "next/navigation";
 import AutoPagination from "@/components/auto-pagination";
 import { TableListResType } from "@/schemaValidations/table.schema";
 import EditTable from "@/app/manage/tables/edit-table";
 import AddTable from "@/app/manage/tables/add-table";
-import { useGetTableList } from "@/queries/useTable";
+import { useDeleteTableMutation, useGetTableList } from "@/queries/useTable";
 import QrCodeTable from "@/components/qrcode-table";
+import { toast } from "sonner";
 
 type TableItem = TableListResType["data"][0];
 
@@ -123,6 +124,19 @@ function AlertDialogDeleteTable({
     tableDelete: TableItem | null;
     setTableDelete: (value: TableItem | null) => void;
 }) {
+    const deleteTableMutation = useDeleteTableMutation();
+    const handleDelete = async () => {
+        if (deleteTableMutation.isPending) return;
+
+        try {
+            const res = await deleteTableMutation.mutateAsync(tableDelete?.number as number);
+
+            setTableDelete(null);
+            toast(res.payload.message);
+        } catch (error) {
+            handleErrorApi({ error });
+        }
+    };
     return (
         <AlertDialog
             open={Boolean(tableDelete)}
@@ -136,16 +150,16 @@ function AlertDialogDeleteTable({
                 <AlertDialogHeader>
                     <AlertDialogTitle>Xóa bàn ăn?</AlertDialogTitle>
                     <AlertDialogDescription>
-                        Bàn{" "}
+                        Bàn
                         <span className="bg-foreground text-primary-foreground rounded px-1">
                             {tableDelete?.number}
-                        </span>{" "}
+                        </span>
                         sẽ bị xóa vĩnh viễn
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction>Continue</AlertDialogAction>
+                    <AlertDialogAction onClick={handleDelete}>Continue</AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>
         </AlertDialog>
