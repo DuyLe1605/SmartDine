@@ -58,7 +58,7 @@ export default function EditEmployee({
     const previewAvatarFromFile = file ? URL.createObjectURL(file) : avatar;
     useEffect(() => {
         if (data) {
-            const { name, email, avatar } = data.payload.data;
+            const { name, email, avatar, role } = data.payload.data;
             form.reset({
                 name,
                 email,
@@ -66,7 +66,7 @@ export default function EditEmployee({
                 password: form.getValues("password"),
                 confirmPassword: form.getValues("confirmPassword"),
                 changePassword: form.getValues("changePassword"),
-                role: form.getValues("role"),
+                role,
             });
         }
     }, [data, form]);
@@ -90,7 +90,7 @@ export default function EditEmployee({
                 const imageUrl = uploadImageResult.payload.data;
                 body = { ...body, avatar: imageUrl };
             }
-
+            console.log(body);
             const res = await updateEmployeeMutation.mutateAsync(body);
 
             toast.success(res.payload.message);
