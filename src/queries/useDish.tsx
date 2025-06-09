@@ -22,7 +22,7 @@ export const useAddDishMutation = () => {
 export const useUpdateDishMutation = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: ({ id, ...body }: { id: number } & UpdateDishBodyType) => dishApiRequest.editDish(id, body),
+        mutationFn: ({ id, ...body }: { id: number } & UpdateDishBodyType) => dishApiRequest.updateDish(id, body),
         onSuccess: () => {
             queryClient.invalidateQueries({
                 queryKey: ["dishes"],
