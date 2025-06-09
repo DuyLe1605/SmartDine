@@ -1,5 +1,11 @@
 import envConfig from "@/config";
-import { clearTokensFormLS, normalizePath, saveAccessTokenToLS, saveRefreshTokenToLS } from "@/lib/utils";
+import {
+    clearTokensFormLS,
+    getAccessTokenFromLs,
+    normalizePath,
+    saveAccessTokenToLS,
+    saveRefreshTokenToLS,
+} from "@/lib/utils";
 import { LoginResType } from "@/schemaValidations/auth.schema";
 import { redirect } from "next/navigation";
 
@@ -63,7 +69,7 @@ const request = async <Response>(
                   "Content-Type": "application/json",
               };
     if (isClient) {
-        const accessToken = localStorage.getItem("accessToken");
+        const accessToken = getAccessTokenFromLs();
         if (accessToken) {
             baseHeaders.Authorization = `Bearer ${accessToken}`;
         }

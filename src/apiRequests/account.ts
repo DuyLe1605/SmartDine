@@ -8,7 +8,6 @@ import {
     CreateEmployeeAccountBodyType,
     CreateGuestBodyType,
     CreateGuestResType,
-    GetListGuestsResType,
     UpdateEmployeeAccountBodyType,
     UpdateMeBodyType,
 } from "@/schemaValidations/account.schema";
@@ -23,7 +22,7 @@ const accountApiRequest = {
         http.put<ChangePasswordV2ResType>(`${prefix}/change-password-v2`, body, {
             headers: { Authorization: `Bearer ${accessToken}` },
         }),
-    list: () => http.get<AccountListResType>(`${prefix}`),
+    list: () => http.get<AccountListResType>(prefix),
     addEmployee: (body: CreateEmployeeAccountBodyType) => http.post<AccountResType>(prefix, body),
     getEmployee: (id: AccountIdParamType["id"]) => http.get<AccountResType>(`${prefix}/detail/${id}`),
     updateEmployee: (id: AccountIdParamType["id"], body: UpdateEmployeeAccountBodyType) =>
