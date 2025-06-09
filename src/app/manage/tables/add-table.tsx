@@ -43,7 +43,9 @@ export default function AddTable() {
         <Dialog
             onOpenChange={(value) => {
                 if (!value) {
+                    form.reset();
                 }
+                setOpen(value);
             }}
             open={open}
         >
