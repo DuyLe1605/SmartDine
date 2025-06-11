@@ -13,7 +13,7 @@ export function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;
     const accessToken = request.cookies.get("accessToken")?.value;
     const refreshToken = request.cookies.get("refreshToken")?.value;
-    console.log(pathname);
+
     // Chưa đăng nhập thì không cho vào protectedPaths
     if (protectedPaths.some((path) => pathname.startsWith(path)) && !refreshToken) {
         const url = new URL("/login", request.url);
