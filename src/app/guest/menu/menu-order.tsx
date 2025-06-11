@@ -1,14 +1,42 @@
 "use client";
 import Image from "next/image";
-import { Minus, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+
 import { useGetDishList } from "@/queries/useDish";
 import { formatCurrency } from "@/lib/utils";
+import Quantity from "@/app/guest/menu/quantity";
+import { GuestCreateOrdersBodyType } from "@/schemaValidations/guest.schema";
+import { useState } from "react";
 
 export default function MenuOrder() {
     const { data } = useGetDishList();
     const dishes = data?.payload.data ?? [];
+    const [orders, setOrders] = useState<GuestCreateOrdersBodyType>([]);
+
+    const totalPrice = orders.reduce((total, currentOrder) => {
+        const currentPrice = dishes.find((dish) => dish.id === currentOrder.dishId)?.price ?? 0;
+
+        return (total += currentOrder.quantity * currentPrice);
+    }, 0);
+    const handleChange = (dishId: number, quantity: number) => {
+        setOrders((prevOrders) => {
+            // Nếu quantity bằng không thì xóa khỏi danh sách gọi món
+            if (quantity === 0) {
+                return prevOrders.filter((order) => order.dishId !== dishId);
+            }
+            const index = orders.findIndex((order) => order.dishId === dishId);
+            // Nếu không tìm thấy index tức có nghĩa là món mới => tiến hành thêm vào mảng
+            if (index === -1) {
+                return [...prevOrders, { dishId, quantity }];
+            }
+
+            const newOrders = [...orders];
+            newOrders[index] = { ...newOrders[index], quantity };
+            return newOrders;
+        });
+    };
+    console.log(orders);
+    console.log(totalPrice);
     return (
         <>
             {dishes.map((dish) => (
@@ -29,22 +57,17 @@ export default function MenuOrder() {
                         <p className="text-xs font-semibold">{formatCurrency(dish.price)}</p>
                     </div>
                     <div className="flex-shrink-0 ml-auto flex justify-center items-center">
-                        <div className="flex gap-1 ">
-                            <Button className="h-6 w-6 p-0">
-                                <Minus className="w-3 h-3" />
-                            </Button>
-                            <Input type="text" readOnly className="h-6 p-1 w-8" />
-                            <Button className="h-6 w-6 p-0">
-                                <Plus className="w-3 h-3" />
-                            </Button>
-                        </div>
+                        <Quantity
+                            onChange={(value) => handleChange(dish.id, value)}
+                            value={orders.find((order) => order.dishId === dish.id)?.quantity ?? 0}
+                        />
                     </div>
                 </div>
             ))}
             <div className="sticky bottom-0">
                 <Button className="w-full justify-between">
-                    <span>Giỏ hàng · 2 món</span>
-                    <span>100,000 đ</span>
+                    <span>Giỏ hàng · {orders.length} món</span>
+                    <span>{formatCurrency(totalPrice)}</span>
                 </Button>
             </div>
         </>
