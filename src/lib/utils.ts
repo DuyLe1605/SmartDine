@@ -5,9 +5,10 @@ import { EntityError } from "./http";
 import { toast } from "sonner";
 import jwt from "jsonwebtoken";
 import authApiRequest from "@/apiRequests/auth";
-import { DishStatus, TableStatus } from "@/constants/type";
+import { DishStatus, Role, TableStatus } from "@/constants/type";
 import envConfig from "@/config";
 import { TokenPayload, TokenTypeValue } from "@/types/jwt.types";
+import guestApiRequest from "@/apiRequests/guest";
 
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
@@ -80,8 +81,8 @@ export const checkAndRefreshToken = async (params?: { onError?: () => void; onSu
     if (!accessToken || !refreshToken) return;
 
     // Tiến hành decode accessToken và refreshToken ra và lấy phần exp, giá trị exp tính bằng giây
-    const decodedAccessToken = jwt.decode(accessToken) as { exp: number; iat: number };
-    const decodedRefreshToken = jwt.decode(refreshToken) as { exp: number; iat: number };
+    const decodedAccessToken = decodeToken(accessToken);
+    const decodedRefreshToken = decodeToken(refreshToken);
 
     // Thời điểm hết hạn của token là tính theo epoch time (s)Add commentMore actions
     // Còn khi các bạn dùng cú pháp new Date().getTime() thì nó sẽ trả về epoch time (ms)
@@ -100,7 +101,9 @@ export const checkAndRefreshToken = async (params?: { onError?: () => void; onSu
 
     if (decodedAccessToken.exp - now < (decodedAccessToken.exp - decodedAccessToken.iat) / 3) {
         try {
-            const res = await authApiRequest.refreshToken();
+            const role = decodedRefreshToken.role;
+            const res =
+                role === Role.Guest ? await guestApiRequest.refreshToken() : await authApiRequest.refreshToken();
             const { accessToken, refreshToken } = res.payload.data;
             saveAccessTokenToLS(accessToken);
             saveRefreshTokenToLS(refreshToken);

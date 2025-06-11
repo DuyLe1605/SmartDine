@@ -11,7 +11,7 @@ import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { useGuestLoginMutation } from "@/queries/useGuest";
 import { handleErrorApi } from "@/lib/utils";
-import { toast } from "sonner";
+import useAppStore from "@/zustand/useAppStore";
 
 export default function GuestLoginForm() {
     const router = useRouter();
@@ -19,7 +19,7 @@ export default function GuestLoginForm() {
     const params = useParams();
     const token = searchParams.get("token");
     const tableNumber = Number(params.number)!;
-
+    const setRole = useAppStore((state) => state.setRole);
     const form = useForm<GuestLoginBodyType>({
         resolver: zodResolver(GuestLoginBody),
         defaultValues: {
@@ -39,8 +39,9 @@ export default function GuestLoginForm() {
     const onSubmit = async (values: GuestLoginBodyType) => {
         if (guestLoginMutation.isPending) return;
         try {
-            console.log("HI");
-            const loginRes = guestLoginMutation.mutateAsync(values);
+            const loginRes = await guestLoginMutation.mutateAsync(values);
+            setRole(loginRes.payload.data.guest.role);
+            router.push("/guest/menu");
         } catch (error: any) {
             handleErrorApi({ error, setError: form.setError });
         }
