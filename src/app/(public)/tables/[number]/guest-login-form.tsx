@@ -7,16 +7,44 @@ import { useForm } from "react-hook-form";
 import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { GuestLoginBody, GuestLoginBodyType } from "@/schemaValidations/guest.schema";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { useEffect } from "react";
+import { useGuestLoginMutation } from "@/queries/useGuest";
+import { handleErrorApi } from "@/lib/utils";
+import { toast } from "sonner";
 
 export default function GuestLoginForm() {
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const params = useParams();
+    const token = searchParams.get("token");
+    const tableNumber = Number(params.number)!;
+
     const form = useForm<GuestLoginBodyType>({
         resolver: zodResolver(GuestLoginBody),
         defaultValues: {
             name: "",
-            token: "",
-            tableNumber: 1,
+            token: token ?? "",
+            tableNumber,
         },
     });
+    const guestLoginMutation = useGuestLoginMutation();
+
+    useEffect(() => {
+        if (!token) {
+            router.push("/");
+        }
+    }, [token, router]);
+
+    const onSubmit = async (values: GuestLoginBodyType) => {
+        if (guestLoginMutation.isPending) return;
+        try {
+            console.log("HI");
+            const loginRes = guestLoginMutation.mutateAsync(values);
+        } catch (error: any) {
+            handleErrorApi({ error, setError: form.setError });
+        }
+    };
 
     return (
         <Card className="mx-auto max-w-sm">
@@ -25,7 +53,11 @@ export default function GuestLoginForm() {
             </CardHeader>
             <CardContent>
                 <Form {...form}>
-                    <form className="space-y-2 max-w-[600px] flex-shrink-0 w-full" noValidate>
+                    <form
+                        className="space-y-2 max-w-[600px] flex-shrink-0 w-full"
+                        noValidate
+                        onSubmit={form.handleSubmit(onSubmit)}
+                    >
                         <div className="grid gap-4">
                             <FormField
                                 control={form.control}

@@ -22,12 +22,12 @@ export default function DropdownAvatar() {
     const router = useRouter();
     const { data } = useAccountMe({ uniqueKey: "dropdown-avatar" });
     const account = data?.payload.data;
-    const setIsAuth = useAppStore((state) => state.setIsAuth);
+    const setRole = useAppStore((state) => state.setRole);
     const handleLogout = async () => {
         if (logoutMutation.isPending) return;
         try {
             const result = await logoutMutation.mutateAsync();
-            setIsAuth(false);
+            setRole();
             router.push("/");
 
             toast.success(result.payload.message);

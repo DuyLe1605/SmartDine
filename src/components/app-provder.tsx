@@ -1,7 +1,7 @@
 "use client";
 
 import RefreshToken from "@/components/refresh-token";
-import { getAccessTokenFromLs } from "@/lib/utils";
+import { decodeToken, getAccessTokenFromLs } from "@/lib/utils";
 import useAppStore from "@/zustand/useAppStore";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -22,11 +22,14 @@ export default function AppProvider({
 }: Readonly<{
     children: React.ReactNode;
 }>) {
-    const setIsAuth = useAppStore((state) => state.setIsAuth);
+    const setRole = useAppStore((state) => state.setRole);
     useEffect(() => {
-        const accessToken = Boolean(getAccessTokenFromLs());
+        const accessToken = getAccessTokenFromLs();
 
-        setIsAuth(accessToken);
+        if (accessToken) {
+            const role = decodeToken(accessToken).role;
+            setRole(role);
+        }
     }, []);
     return (
         // Provide the client to your App

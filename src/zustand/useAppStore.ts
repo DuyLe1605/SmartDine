@@ -1,16 +1,20 @@
 import { clearTokensFormLS } from "@/lib/utils";
+import { RoleType } from "@/types/jwt.types";
 import { create } from "zustand";
 
 interface AppStoreType {
     isAuth: boolean;
-    setIsAuth: (auth: boolean) => void;
+
+    role: RoleType | undefined;
+    setRole: (role?: RoleType | undefined) => void;
 }
 
 const useAppStore = create<AppStoreType>((set) => ({
+    role: undefined,
     isAuth: false,
-    setIsAuth: (auth: boolean) => {
-        set({ isAuth: auth });
-        if (!auth) {
+    setRole: (role?: RoleType | undefined) => {
+        set({ role, isAuth: Boolean(role) });
+        if (!role) {
             clearTokensFormLS();
         }
     },
