@@ -9,6 +9,17 @@ import useAppStore from "@/zustand/useAppStore";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 const menuItems: {
     title: string;
@@ -82,9 +93,21 @@ export default function NavItems({ className }: { className?: string }) {
                 return null;
             })}
             {role && (
-                <button className={cn(className, "cursor-pointer")} onClick={handleLogout}>
-                    Đăng xuất
-                </button>
+                <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                        <button className={cn(className, "cursor-pointer")}>Đăng xuất</button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                        <AlertDialogHeader>
+                            <AlertDialogTitle>Bạn có muốn đăng xuất hay không ?</AlertDialogTitle>
+                            <AlertDialogDescription>Nếu không muốn bạn có thể bấm quay lại</AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                            <AlertDialogCancel>Quay Lại</AlertDialogCancel>
+                            <AlertDialogAction onClick={handleLogout}>Đăng xuất</AlertDialogAction>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
             )}
         </>
     );

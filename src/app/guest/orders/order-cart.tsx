@@ -9,6 +9,7 @@ import socket from "@/socket";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect } from "react";
+import { toast } from "sonner";
 
 export default function OrderCart() {
     const { data, refetch } = useGetGuestOrderListQuery();
@@ -32,6 +33,10 @@ export default function OrderCart() {
         }
 
         function onUpdateOrder(data: UpdateOrderResType["data"]) {
+            const {
+                dishSnapshot: { name },
+            } = data;
+            toast(`Món ${name} được cập nhật sang trạng thái "${getVietnameseOrderStatus(data.status)}"`);
             refetch();
         }
 

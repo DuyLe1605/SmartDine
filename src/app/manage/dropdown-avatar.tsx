@@ -16,6 +16,17 @@ import { toast } from "sonner";
 import { generateAvatarName, handleErrorApi } from "@/lib/utils";
 import { useAccountMe } from "@/queries/useAccount";
 import useAppStore from "@/zustand/useAppStore";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 export default function DropdownAvatar() {
     const logoutMutation = useLogoutMutation();
@@ -37,27 +48,43 @@ export default function DropdownAvatar() {
         }
     };
     return (
-        <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="icon" className="overflow-hidden rounded-full">
-                    <Avatar>
-                        <AvatarImage src={account?.avatar ?? undefined} alt={account?.name} />
-                        <AvatarFallback>{generateAvatarName(account?.name, "Avatar")}</AvatarFallback>
-                    </Avatar>
-                </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-                <DropdownMenuLabel>{account?.name}</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
-                    <Link href={"/manage/setting"} className="cursor-pointer">
-                        Cài đặt
-                    </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem>Hỗ trợ</DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={handleLogout}>Đăng xuất</DropdownMenuItem>
-            </DropdownMenuContent>
-        </DropdownMenu>
+        // Nên bọc dropdown menu bằng alert dialog
+        <AlertDialog>
+            <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                    <Button variant="outline" size="icon" className="overflow-hidden rounded-full">
+                        <Avatar>
+                            <AvatarImage src={account?.avatar ?? undefined} alt={account?.name} />
+                            <AvatarFallback>{generateAvatarName(account?.name, "Avatar")}</AvatarFallback>
+                        </Avatar>
+                    </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                    <DropdownMenuLabel>{account?.name}</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                        <Link href={"/manage/setting"} className="cursor-pointer">
+                            Cài đặt
+                        </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>Hỗ trợ</DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <AlertDialogTrigger asChild>
+                        <DropdownMenuItem>Đăng xuất</DropdownMenuItem>
+                    </AlertDialogTrigger>
+                </DropdownMenuContent>
+            </DropdownMenu>
+
+            <AlertDialogContent>
+                <AlertDialogHeader>
+                    <AlertDialogTitle>Bạn có muốn đăng xuất hay không ?</AlertDialogTitle>
+                    <AlertDialogDescription>Nếu không muốn bạn có thể bấm quay lại</AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                    <AlertDialogCancel>Quay Lại</AlertDialogCancel>
+                    <AlertDialogAction onClick={handleLogout}>Đăng xuất</AlertDialogAction>
+                </AlertDialogFooter>
+            </AlertDialogContent>
+        </AlertDialog>
     );
 }
