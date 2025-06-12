@@ -1,2 +1,3 @@
 Lúc cập nhật tài khoản admin/hoặc nhân viên(?) ở bên Edit Employee component, khi thay thì dropdown avatar chưa dc cập nhật
 Có thể thêm fallback cho các suspend như account table, dishtable và table table
+Guest lâu k login thì bị lỗi navtiem,vào table mà redirect về trang chủ

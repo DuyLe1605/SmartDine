@@ -144,7 +144,7 @@ export const getVietnameseOrderStatus = (status: (typeof OrderStatus)[keyof type
         case OrderStatus.Pending:
             return "Chờ xử lý";
         case OrderStatus.Processing:
-            return "Đang nấu";
+            return "Đang Chế biến";
         default:
             return "Từ chối";
     }

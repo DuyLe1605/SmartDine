@@ -1,16 +1,50 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { formatCurrency, getVietnameseOrderStatus } from "@/lib/utils";
 import { useGetGuestOrderListQuery } from "@/queries/useGuest";
+import { UpdateOrderResType } from "@/schemaValidations/order.schema";
+import socket from "@/socket";
 import Image from "next/image";
+import Link from "next/link";
+import { useEffect } from "react";
 
 export default function OrderCart() {
-    const { data } = useGetGuestOrderListQuery();
+    const { data, refetch } = useGetGuestOrderListQuery();
     const dishes = data?.payload.data || [];
     const totalPrice = dishes.reduce((total, currentDish) => {
         return (total += currentDish.dishSnapshot.price * currentDish.quantity);
     }, 0);
+
+    // Socket IO
+    useEffect(() => {
+        if (socket.connected) {
+            onConnect();
+        }
+
+        function onConnect() {
+            console.log("socket.id: ", socket.id);
+        }
+
+        function onDisconnect() {
+            console.log("disconnected");
+        }
+
+        function onUpdateOrder(data: UpdateOrderResType["data"]) {
+            refetch();
+        }
+
+        socket.on("update-order", onUpdateOrder);
+        socket.on("connect", onConnect);
+        socket.on("disconnect", onDisconnect);
+
+        return () => {
+            socket.off("connect", onConnect);
+            socket.off("disconnect", onDisconnect);
+        };
+    }, []);
+
     return (
         <>
             {dishes.map((dish) => (
@@ -40,10 +74,19 @@ export default function OrderCart() {
                 </div>
             ))}
             <div className="sticky bottom-0">
-                <div className="w-full justify-between flex font-semibold text-xl">
-                    <p>Tổng · {dishes.length} món</p>
-                    <p>{formatCurrency(totalPrice)}</p>
-                </div>
+                {dishes.length === 0 ? (
+                    <div>
+                        <h2>Bạn chưa gọi món !</h2>
+                        <Link href="/guest/menu">
+                            <Button> Bấm để gọi ngay</Button>
+                        </Link>
+                    </div>
+                ) : (
+                    <div className="w-full justify-between flex font-semibold text-xl">
+                        <p>Tổng · {dishes.length} món</p>
+                        <p>{formatCurrency(totalPrice)}</p>
+                    </div>
+                )}
             </div>
         </>
     );
