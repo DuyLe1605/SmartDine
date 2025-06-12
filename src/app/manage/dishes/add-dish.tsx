@@ -114,7 +114,7 @@ export default function AddDish() {
                                     <FormItem>
                                         <div className="flex gap-2 items-start justify-start">
                                             <Avatar className="aspect-square w-[100px] h-[100px] rounded-md object-cover">
-                                                <AvatarImage src={previewAvatarFromFile} />
+                                                <AvatarImage src={previewAvatarFromFile || undefined} />
                                                 <AvatarFallback className="rounded-none">
                                                     {(generateAvatarName(name), "Ảnh Món ăn")}
                                                 </AvatarFallback>

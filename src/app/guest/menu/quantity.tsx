@@ -10,7 +10,7 @@ interface Props {
 export default function Quantity({ onChange, value }: Props) {
     return (
         <div className="flex gap-1 ">
-            <Button className="h-6 w-6 p-0" disabled={value === 0} onClick={() => onChange(value - 1)}>
+            <Button className="h-6 w-6 p-0 cursor-pointer" disabled={value === 0} onClick={() => onChange(value - 1)}>
                 <Minus className="w-3 h-3" />
             </Button>
             <Input
@@ -28,7 +28,7 @@ export default function Quantity({ onChange, value }: Props) {
                     onChange(numberValue);
                 }}
             />
-            <Button className="h-6 w-6 p-0" onClick={() => onChange(value + 1)}>
+            <Button className="h-6 w-6 p-0 cursor-pointer" onClick={() => onChange(value + 1)}>
                 <Plus className="w-3 h-3" />
             </Button>
         </div>

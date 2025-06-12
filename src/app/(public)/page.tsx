@@ -45,7 +45,7 @@ export default async function Home() {
                                         alt={item.name}
                                         width={150}
                                         height={150}
-                                        className="object-cover rounded-md"
+                                        className="w-[150px] h-[150px] object-cover rounded-md"
                                     />
                                 </div>
                                 <div className="space-y-1">
