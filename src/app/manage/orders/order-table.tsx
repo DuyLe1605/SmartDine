@@ -33,6 +33,8 @@ import { endOfDay, format, startOfDay } from "date-fns";
 import TableSkeleton from "@/app/manage/orders/table-skeleton";
 
 import { GuestCreateOrdersResType } from "@/schemaValidations/guest.schema";
+import { useGetOrderListQuery } from "@/queries/useOrder";
+import { useGetTableList } from "@/queries/useTable";
 
 export const OrderTableContext = createContext({
     setOrderIdEdit: (value: number | undefined) => {},
@@ -65,8 +67,13 @@ export default function OrderTable() {
     const page = searchParam.get("page") ? Number(searchParam.get("page")) : 1;
     const pageIndex = page - 1;
     const [orderIdEdit, setOrderIdEdit] = useState<number | undefined>();
-    const orderList: any = [];
-    const tableList: any = [];
+
+    // Queries
+    const getOrderListQuery = useGetOrderListQuery({ fromDate, toDate });
+    const getTableListQuery = useGetTableList();
+    const orderList = getOrderListQuery.data?.payload.data ?? [];
+    const tableList = getTableListQuery.data?.payload.data ?? [];
+
     const tableListSortedByNumber = tableList.sort((a: any, b: any) => a.number - b.number);
     const [sorting, setSorting] = useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -233,6 +240,8 @@ export default function OrderTable() {
                     servingGuestByTableNumber={servingGuestByTableNumber}
                 />
                 {/* <TableSkeleton /> */}
+
+                {getOrderListQuery.isSuccess && <></>}
                 <div className="rounded-md border">
                     <Table>
                         <TableHeader>
@@ -251,7 +260,9 @@ export default function OrderTable() {
                             ))}
                         </TableHeader>
                         <TableBody>
-                            {table.getRowModel().rows?.length ? (
+                            {getOrderListQuery.isPending ? (
+                                <TableSkeleton />
+                            ) : table.getRowModel().rows?.length ? (
                                 table.getRowModel().rows.map((row) => (
                                     <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
                                         {row.getVisibleCells().map((cell) => (
