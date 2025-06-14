@@ -48,7 +48,7 @@ export default function EditEmployee({
         },
     });
     // queries
-    const { data } = useGetAccount({ id: id as number });
+    const { data } = useGetAccount({ id: id as number, enabled: Boolean(id) });
     const updateEmployeeMutation = useUpdateEmployee();
     const uploadMediaMutation = useUploadMediaMutation();
 

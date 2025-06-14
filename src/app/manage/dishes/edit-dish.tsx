@@ -49,7 +49,7 @@ export default function EditDish({
         },
     });
     // Queries
-    const { data } = useGetDish({ id: id as number });
+    const { data } = useGetDish({ id: id as number, enabled: Boolean(id) });
     const updateDishMutation = useUpdateDishMutation();
     const uploadMediaMutation = useUploadMediaMutation();
 

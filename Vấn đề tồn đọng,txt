@@ -1,4 +1,13 @@
 Lúc cập nhật tài khoản admin/hoặc nhân viên(?) ở bên Edit Employee component, khi thay thì dropdown avatar chưa dc cập nhật
+
 Có thể thêm fallback cho các suspend như account table, dishtable và table table
+
 Guest lâu k login thì bị lỗi navtiem,vào table mà redirect về trang chủ
+
 có thể làm chức năng nếu chưua thanh toán thfi k cho khách logout
+
+
+*Có thể cân nhắc khi người dùng thanh toán xong thì cho logout và xóa token luôn,thì không cần làm refresh token nữa
+Guest het han refresh token thi bi logout va redirect ve login,phai redirect ve trang table :CHỉ cần làm chức năng khi hết hạn token mà vào lại web,không cần chức năng đang dùng mà hết hạn.vì khách sẽ không ngồi quá thời gian hết hạn refresh token
+
+khach order thi ben nhan vien chua tu cap nhat don hang

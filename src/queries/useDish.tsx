@@ -4,8 +4,8 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const useGetDishList = () => useQuery({ queryKey: ["dishes"], queryFn: dishApiRequest.list });
 
-export const useGetDish = ({ id }: { id: number }) =>
-    useQuery({ queryKey: ["dish", id], queryFn: () => dishApiRequest.getDish(id), enabled: Boolean(id) });
+export const useGetDish = ({ id, enabled }: { id: number; enabled: boolean }) =>
+    useQuery({ queryKey: ["dish", id], queryFn: () => dishApiRequest.getDish(id), enabled });
 
 export const useAddDishMutation = () => {
     const queryClient = useQueryClient();

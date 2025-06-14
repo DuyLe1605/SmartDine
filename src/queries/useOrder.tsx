@@ -9,18 +9,13 @@ export const useGetOrderListQuery = (queryParams: GetOrdersQueryParamsType) => {
     });
 };
 
-export const useGetOrderQuery = ({ id }: { id: number }) =>
-    useQuery({ queryKey: ["order", id], queryFn: () => orderApiRequest.getOrder(id), enabled: Boolean(id) });
+export const useGetOrderDetailQuery = ({ id, enabled }: { id: number; enabled: boolean }) =>
+    useQuery({ queryKey: ["order", id], queryFn: () => orderApiRequest.getOrder(id), enabled });
 
-export const updateOrderMutation = () => {
+export const useUpdateOrderMutation = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: ({ orderId, ...body }: { orderId: number } & UpdateOrderBodyType) =>
             orderApiRequest.updateOrder(orderId, body),
-        onSuccess: () => {
-            queryClient.invalidateQueries({
-                queryKey: ["orders"],
-            });
-        },
     });
 };

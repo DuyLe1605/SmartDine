@@ -45,10 +45,12 @@ export default function OrderCart() {
         socket.on("disconnect", onDisconnect);
 
         return () => {
+            // Nhớ phải clean up
             socket.off("connect", onConnect);
             socket.off("disconnect", onDisconnect);
+            socket.off("update-order", onUpdateOrder);
         };
-    }, []);
+    }, [refetch]);
 
     return (
         <>

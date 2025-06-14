@@ -36,7 +36,7 @@ export default function EditTable({
         },
     });
 
-    const { data } = useGetTable({ number: id as number });
+    const { data } = useGetTable({ number: id as number, enabled: Boolean(id) });
     const table = data?.payload.data;
 
     const updateTableMutation = useUpdateTableMutation();

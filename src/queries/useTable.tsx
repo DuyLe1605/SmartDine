@@ -4,11 +4,11 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const useGetTableList = () => useQuery({ queryKey: ["tables"], queryFn: tableApiRequest.list });
 
-export const useGetTable = ({ number }: { number: number }) =>
+export const useGetTable = ({ number, enabled }: { number: number; enabled: boolean }) =>
     useQuery({
         queryKey: ["table", number],
         queryFn: () => tableApiRequest.getTable(number),
-        enabled: Boolean(number),
+        enabled,
     });
 
 export const useAddTableMutation = () => {

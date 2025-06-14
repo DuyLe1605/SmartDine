@@ -28,8 +28,8 @@ export const useChangePasswordMutation = () =>
 export const useGetAccountList = () => useQuery({ queryKey: ["accounts"], queryFn: accountApiRequest.list });
 
 // Dùng như vậy nghĩa là nó sẽ lấy ra id từ obj truyền vào, để lỡ như sau này obj có nhiều thuộc tính thì k bị lỗi
-export const useGetAccount = ({ id }: { id: number }) =>
-    useQuery({ queryKey: ["accounts", id], queryFn: () => accountApiRequest.getEmployee(id), enabled: Boolean(id) });
+export const useGetAccount = ({ id, enabled }: { id: number; enabled: boolean }) =>
+    useQuery({ queryKey: ["accounts", id], queryFn: () => accountApiRequest.getEmployee(id), enabled });
 
 export const useAddAccountMutation = () => {
     const queryClient = useQueryClient();

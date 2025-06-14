@@ -33,8 +33,10 @@ import { endOfDay, format, startOfDay } from "date-fns";
 import TableSkeleton from "@/app/manage/orders/table-skeleton";
 
 import { GuestCreateOrdersResType } from "@/schemaValidations/guest.schema";
-import { useGetOrderListQuery } from "@/queries/useOrder";
+import { useGetOrderListQuery, useUpdateOrderMutation } from "@/queries/useOrder";
 import { useGetTableList } from "@/queries/useTable";
+import socket from "@/socket";
+import { toast } from "sonner";
 
 export const OrderTableContext = createContext({
     setOrderIdEdit: (value: number | undefined) => {},
@@ -73,6 +75,9 @@ export default function OrderTable() {
     const getTableListQuery = useGetTableList();
     const orderList = getOrderListQuery.data?.payload.data ?? [];
     const tableList = getTableListQuery.data?.payload.data ?? [];
+    const orderListRefetch = getOrderListQuery.refetch;
+    // Mutation
+    const updateOrderMutation = useUpdateOrderMutation();
 
     const tableListSortedByNumber = tableList.sort((a: any, b: any) => a.number - b.number);
     const [sorting, setSorting] = useState<SortingState>([]);
@@ -91,7 +96,13 @@ export default function OrderTable() {
         dishId: number;
         status: (typeof OrderStatusValues)[number];
         quantity: number;
-    }) => {};
+    }) => {
+        try {
+            await updateOrderMutation.mutateAsync(body);
+        } catch (error) {
+            handleErrorApi({ error });
+        }
+    };
 
     const table = useReactTable({
         data: orderList,
@@ -121,6 +132,59 @@ export default function OrderTable() {
             pageSize: PAGE_SIZE,
         });
     }, [table, pageIndex]);
+
+    // Socket IO
+    useEffect(() => {
+        console.log("1");
+        if (socket.connected) {
+            onConnect();
+        }
+
+        function refetch() {
+            const now = new Date();
+            if (now >= fromDate && now <= toDate) {
+                orderListRefetch();
+            }
+        }
+
+        function onConnect() {
+            console.log("socket.id: ", socket.id);
+        }
+
+        function onDisconnect() {
+            console.log("disconnected");
+        }
+
+        function onNewOrder(data: GuestCreateOrdersResType["data"]) {
+            const { guest } = data[0];
+            refetch();
+            toast(`Khách hàng ${guest?.name} ở bàn ${guest?.tableNumber} vừa đặt món`);
+        }
+
+        // Khi 1 admin cập nhật, các admin khác cũng dc hiển thị
+
+        function onUpdateOrder(data: UpdateOrderResType["data"]) {
+            console.log("CAp nhat");
+            const {
+                dishSnapshot: { name },
+            } = data;
+            refetch();
+            toast(`Món ${name} được cập nhật sang trạng thái "${getVietnameseOrderStatus(data.status)}"`);
+        }
+
+        socket.on("update-order", onUpdateOrder);
+        socket.on("new-order", onNewOrder);
+        socket.on("connect", onConnect);
+        socket.on("disconnect", onDisconnect);
+
+        return () => {
+            // Chúng ta on những cái nào thì khi clean up phải clean up cái đó
+            socket.off("connect", onConnect);
+            socket.off("disconnect", onDisconnect);
+            socket.off("update-order", onUpdateOrder);
+            socket.off("new-order", onNewOrder);
+        };
+    }, [orderListRefetch, fromDate, toDate]);
 
     const resetDateFilter = () => {
         setFromDate(initFromDate);
