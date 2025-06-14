@@ -135,7 +135,6 @@ export default function OrderTable() {
 
     // Socket IO
     useEffect(() => {
-        console.log("1");
         if (socket.connected) {
             onConnect();
         }
