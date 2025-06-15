@@ -1,6 +1,7 @@
 "use client";
 
 import { checkAndRefreshToken } from "@/lib/utils";
+import useAppStore from "@/zustand/useAppStore";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { toast } from "sonner";
@@ -9,6 +10,7 @@ const UNAUTHENTICATED_PATHS = ["/login", "/register", "/refresh-token"];
 export default function RefreshToken() {
     const pathname = usePathname();
     const router = useRouter();
+    const setRole = useAppStore((state) => state.setRole);
     useEffect(() => {
         if (UNAUTHENTICATED_PATHS.includes(pathname)) return;
         let interval: any = null;
@@ -52,12 +54,14 @@ export default function RefreshToken() {
             onError: () => {
                 clearInterval(interval);
                 toast.error("refreshToken hết hạn, vui lòng đăng nhập lại !", { duration: 4000 });
+                setRole(undefined);
                 router.push("/login");
             },
         });
         // Timeout interval phải bé hơn thời gian hết hạn của access token
         // Ví dụ thời gian hết hạn access token là 10s thì 1s mình sẽ cho check 1 lần
         // vì server backend quy định thời gian hết hạn là 15p (có thể chỉnh) nên mình sẽ check 3p 1 lần
+        // const TIMEOUT = 1000 * 60 * 3;
         const TIMEOUT = 1000 * 60 * 3;
         interval = setInterval(
             () =>
@@ -65,6 +69,7 @@ export default function RefreshToken() {
                     onError: () => {
                         clearInterval(interval);
                         toast.error("refreshToken hết hạn, vui lòng đăng nhập lại !", { duration: 4000 });
+                        setRole(undefined);
                         router.push("/login");
                     },
                 }),
