@@ -23,11 +23,9 @@ function Logout() {
             (refreshTokenFromUrl && refreshTokenFromUrl !== getRefreshTokenFromLs()) ||
             (accessTokenFromUrl && accessTokenFromUrl !== getAccessTokenFromLs())
         ) {
-            console.log("return");
             return;
         }
 
-        console.log("pass");
         mutateRef.current = mutateAsync;
         mutateAsync().then((res) => {
             setTimeout(() => {

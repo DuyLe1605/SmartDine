@@ -4,16 +4,22 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { OrderStatus } from "@/constants/type";
 import { formatCurrency, getVietnameseOrderStatus } from "@/lib/utils";
-import { useGetGuestOrderListQuery } from "@/queries/useGuest";
-import { UpdateOrderResType } from "@/schemaValidations/order.schema";
+import { useGetGuestOrderListQuery, useGuestLogoutMutation } from "@/queries/useGuest";
+import { PayGuestOrdersResType, UpdateOrderResType } from "@/schemaValidations/order.schema";
 import socket from "@/socket";
+import useAppStore from "@/zustand/useAppStore";
+import { CheckCircle } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { toast } from "sonner";
 
 export default function OrderCart() {
     const { data, refetch } = useGetGuestOrderListQuery();
+    const setRole = useAppStore((state) => state.setRole);
+    const { mutateAsync } = useGuestLogoutMutation();
+    const router = useRouter();
     const orders = data?.payload.data || [];
     const { unPaid, paid } = orders.reduce(
         (total, currentDish) => {
@@ -67,20 +73,45 @@ export default function OrderCart() {
                 dishSnapshot: { name },
             } = data;
             toast(`Món ${name} được cập nhật sang trạng thái "${getVietnameseOrderStatus(data.status)}"`);
+
             refetch();
+        }
+
+        function onPayment(data: PayGuestOrdersResType["data"]) {
+            toast(
+                <div className="flex gap-2 items-center">
+                    <CheckCircle className="h-5 w-5 text-green-500" />
+                    <div className="flex flex-col">
+                        <span className="font-medium">Thanh toán thành công</span>
+                        <span className="text-xs text-gray-500">
+                            Nhà hàng Smart Dine xin cảm ơn và hẹn gặp lại quý khách !
+                        </span>
+                    </div>
+                </div>,
+                { duration: 5000 }
+            );
+            toast("Hệ thống sẽ tự động đăng xuất bạn ra khỏi nhà hàng ");
+            refetch();
+
+            setTimeout(async () => {
+                await mutateAsync();
+                setRole(undefined);
+                router.push("/");
+            }, 1000 * 10);
         }
 
         socket.on("update-order", onUpdateOrder);
         socket.on("connect", onConnect);
         socket.on("disconnect", onDisconnect);
-
+        socket.on("payment", onPayment);
         return () => {
             // Nhớ phải clean up
             socket.off("connect", onConnect);
             socket.off("disconnect", onDisconnect);
             socket.off("update-order", onUpdateOrder);
+            socket.off("payment", onPayment);
         };
-    }, [refetch]);
+    }, [refetch, mutateAsync, setRole, router]);
 
     return (
         <>
@@ -119,7 +150,7 @@ export default function OrderCart() {
                         </Link>
                     </div>
                 ) : (
-                    <div>
+                    <div className="bg-background/88 border-3 border-foreground/70 rounded-md  px-2 py-4">
                         <div className="w-full justify-between flex font-semibold text-xl">
                             <p>Chưa thanh toán · {unPaid.quantity} món</p>
                             <p>{formatCurrency(unPaid.total)}</p>

@@ -157,13 +157,12 @@ export default function OrderTable() {
         function onNewOrder(data: GuestCreateOrdersResType["data"]) {
             const { guest } = data[0];
             refetch();
-            toast(`Khách hàng ${guest?.name} ở bàn ${guest?.tableNumber} vừa đặt món`);
+            toast(`Khách hàng ${guest?.name} tại bàn ${guest?.tableNumber} vừa đặt ${data.length} đơn`);
         }
 
         // Khi 1 admin cập nhật, các admin khác cũng dc hiển thị
 
         function onUpdateOrder(data: UpdateOrderResType["data"]) {
-            console.log("CAp nhat");
             const {
                 dishSnapshot: { name },
             } = data;
@@ -171,7 +170,16 @@ export default function OrderTable() {
             toast(`Món ${name} được cập nhật sang trạng thái "${getVietnameseOrderStatus(data.status)}"`);
         }
 
+        function onPayment(data: PayGuestOrdersResType["data"]) {
+            const { guest } = data[0];
+            refetch();
+            toast(
+                `Khách hàng ${guest?.name} tại bàn ${guest?.tableNumber} đã thanh toán thành công ${data.length} đơn`
+            );
+        }
+
         socket.on("update-order", onUpdateOrder);
+        socket.on("payment", onPayment);
         socket.on("new-order", onNewOrder);
         socket.on("connect", onConnect);
         socket.on("disconnect", onDisconnect);
@@ -182,6 +190,7 @@ export default function OrderTable() {
             socket.off("disconnect", onDisconnect);
             socket.off("update-order", onUpdateOrder);
             socket.off("new-order", onNewOrder);
+            socket.off("payment", onPayment);
         };
     }, [orderListRefetch, fromDate, toDate]);
 

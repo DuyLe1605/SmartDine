@@ -105,6 +105,9 @@ export default function LoginForm() {
                         </div>
                     </form>
                 </Form>
+                <p className="text-xs mt-4 text-foreground/40">
+                    * Nếu bạn là khách, hãy quét mã QR trên bàn ăn để đăng nhập
+                </p>
             </CardContent>
         </Card>
     );
