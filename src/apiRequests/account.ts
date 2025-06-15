@@ -8,9 +8,12 @@ import {
     CreateEmployeeAccountBodyType,
     CreateGuestBodyType,
     CreateGuestResType,
+    GetGuestListQueryParamsType,
+    GetListGuestsResType,
     UpdateEmployeeAccountBodyType,
     UpdateMeBodyType,
 } from "@/schemaValidations/account.schema";
+import queryString from "query-string";
 
 const prefix = "/accounts";
 const accountApiRequest = {
@@ -28,7 +31,15 @@ const accountApiRequest = {
     updateEmployee: (id: AccountIdParamType["id"], body: UpdateEmployeeAccountBodyType) =>
         http.put<AccountResType>(`${prefix}/detail/${id}`, body),
     deleteEmployee: (id: AccountIdParamType["id"]) => http.delete<AccountResType>(`${prefix}/detail/${id}`),
-    addGuest: (body: CreateGuestBodyType) => http.post<CreateGuestResType>(`${prefix}/guests`, body),
+    getGuestList: (queryParams: GetGuestListQueryParamsType) =>
+        http.get<GetListGuestsResType>(
+            `${prefix}?${queryString.stringify({
+                fromDate: queryParams.fromDate?.toISOString(),
+                toDate: queryParams.toDate?.toISOString(),
+            })}`
+        ),
+
+    createGuest: (body: CreateGuestBodyType) => http.post<CreateGuestResType>(`${prefix}/guests`, body),
 };
 
 export default accountApiRequest;

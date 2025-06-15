@@ -1,5 +1,9 @@
 import accountApiRequest from "@/apiRequests/account";
-import { AccountResType, UpdateEmployeeAccountBodyType } from "@/schemaValidations/account.schema";
+import {
+    AccountResType,
+    GetGuestListQueryParamsType,
+    UpdateEmployeeAccountBodyType,
+} from "@/schemaValidations/account.schema";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 // Truyền thêm unique key để có thể tránh caching
@@ -65,3 +69,12 @@ export const useDeleteEmployee = () => {
         },
     });
 };
+
+// Guest
+export const useAddGuestMutation = () => useMutation({ mutationFn: accountApiRequest.createGuest });
+
+export const useGuestListQuery = (queryParams: GetGuestListQueryParamsType) =>
+    useQuery({
+        queryKey: ["guest", queryParams],
+        queryFn: () => accountApiRequest.getGuestList(queryParams),
+    });

@@ -13,6 +13,11 @@ export const useGetOrderListQuery = (queryParams: GetOrdersQueryParamsType) => {
     });
 };
 
+export const useCreateOrdersMutation = () =>
+    useMutation({
+        mutationFn: orderApiRequest.createOrders,
+    });
+
 export const useGetOrderDetailQuery = ({ id, enabled }: { id: number; enabled: boolean }) =>
     useQuery({ queryKey: ["order", id], queryFn: () => orderApiRequest.getOrder(id), enabled });
 
