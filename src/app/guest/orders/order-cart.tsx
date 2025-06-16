@@ -95,7 +95,7 @@ export default function OrderCart() {
 
             setTimeout(async () => {
                 await mutateAsync();
-                setRole(undefined);
+                setRole();
                 router.push("/");
             }, 1000 * 10);
         }

@@ -27,6 +27,7 @@ import {
     generateAvatarName,
     getAccessTokenFromLs,
     getRefreshTokenFromLs,
+    getVietnameseRoleName,
     handleErrorApi,
 } from "@/lib/utils";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -97,7 +98,7 @@ export default function EditEmployee({
                 const imageUrl = uploadImageResult.payload.data;
                 body = { ...body, avatar: imageUrl };
             }
-            console.log(body);
+
             const res = await updateEmployeeMutation.mutateAsync(body);
 
             toast.success(res.payload.message);
@@ -204,7 +205,7 @@ export default function EditEmployee({
                                 render={({ field }) => (
                                     <FormItem>
                                         <div className="grid grid-cols-4 items-center justify-items-start gap-4">
-                                            <Label htmlFor="description">Trạng thái</Label>
+                                            <Label htmlFor="description">Vai trò</Label>
                                             <div className="col-span-3 w-full space-y-2">
                                                 <Select
                                                     onValueChange={(value) => {
@@ -231,7 +232,7 @@ export default function EditEmployee({
                                                             if (status === Role.Guest) return null;
                                                             return (
                                                                 <SelectItem key={status} value={status}>
-                                                                    {status}
+                                                                    {getVietnameseRoleName(status)}
                                                                 </SelectItem>
                                                             );
                                                         })}

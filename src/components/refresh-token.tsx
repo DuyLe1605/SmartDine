@@ -1,6 +1,8 @@
 "use client";
 
 import { checkAndRefreshToken } from "@/lib/utils";
+import { AccountResType } from "@/schemaValidations/account.schema";
+import socket from "@/socket";
 import useAppStore from "@/zustand/useAppStore";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -10,6 +12,7 @@ const UNAUTHENTICATED_PATHS = ["/login", "/register", "/refresh-token"];
 export default function RefreshToken() {
     const pathname = usePathname();
     const router = useRouter();
+    const role = useAppStore((state) => state.role);
     const setRole = useAppStore((state) => state.setRole);
     useEffect(() => {
         if (UNAUTHENTICATED_PATHS.includes(pathname)) return;
@@ -49,34 +52,57 @@ export default function RefreshToken() {
         //     }
         // };
 
-        // Phải gọi lần đầu tiên, vì interval sẽ chạy sau thời gian TIMEOUTAdd commentMore actions
-        checkAndRefreshToken({
-            onError: () => {
-                clearInterval(interval);
-                toast.error("refreshToken hết hạn, vui lòng đăng nhập lại !", { duration: 4000 });
-                setRole(undefined);
-                router.push("/login");
-            },
-        });
+        // Phải gọi lần đầu tiên, vì interval sẽ chạy sau thời gian TIMEOUT
+        const onRefreshToken = (force?: boolean, onSuccess?: () => void) => {
+            checkAndRefreshToken({
+                onError: () => {
+                    clearInterval(interval);
+                    toast.error("refreshToken hết hạn, vui lòng đăng nhập lại !", { duration: 4000 });
+                    setRole();
+                    router.push("/login");
+                },
+                onSuccess,
+                force,
+            });
+        };
+        onRefreshToken();
         // Timeout interval phải bé hơn thời gian hết hạn của access token
         // Ví dụ thời gian hết hạn access token là 10s thì 1s mình sẽ cho check 1 lần
         // vì server backend quy định thời gian hết hạn là 15p (có thể chỉnh) nên mình sẽ check 3p 1 lần
         // const TIMEOUT = 1000 * 60 * 3;
         const TIMEOUT = 1000 * 60 * 3;
-        interval = setInterval(
-            () =>
-                checkAndRefreshToken({
-                    onError: () => {
-                        clearInterval(interval);
-                        toast.error("refreshToken hết hạn, vui lòng đăng nhập lại !", { duration: 4000 });
-                        setRole(undefined);
-                        router.push("/login");
-                    },
-                }),
-            TIMEOUT
-        );
+        interval = setInterval(onRefreshToken, TIMEOUT);
+
+        // Socket lắng nghe sự kiện refresh Token
+        if (socket.connected) {
+            onConnect();
+        }
+
+        function onConnect() {
+            console.log("socket.id: ", socket.id);
+        }
+
+        function onDisconnect() {
+            console.log("disconnected");
+        }
+        function onRefreshTokenSocket(data: AccountResType["data"]) {
+            // Server sẽ trả về data, trong đó có role và mình sẽ tiến hành set lại Role
+
+            const { role } = data;
+            onRefreshToken(true, () => {
+                setRole(role);
+            });
+        }
+
+        socket.on("connect", onConnect);
+        socket.on("disconnect", onDisconnect);
+        socket.on("refresh-token", onRefreshTokenSocket);
         return () => {
             clearInterval(interval);
+            // Nhớ phải clean up
+            socket.off("connect", onConnect);
+            socket.off("disconnect", onDisconnect);
+            socket.off("refresh-token", onRefreshTokenSocket);
         };
     }, [pathname]);
     return null;

@@ -74,7 +74,11 @@ export const clearTokensFormLS = () => {
     isClient && localStorage.removeItem("refreshToken");
 };
 
-export const checkAndRefreshToken = async (params?: { onError?: () => void; onSuccess?: () => void }) => {
+export const checkAndRefreshToken = async (params?: {
+    onError?: () => void;
+    onSuccess?: () => void;
+    force?: boolean;
+}) => {
     // Không nên đưa logic lấy access và refresh token ra khỏi cái function `checkAndRefreshToken`
     // Vì để mỗi lần mà checkAndRefreshToken() được gọi thì chúng ta se có một access và refresh token mới
     // Tránh hiện tượng bug nó lấy access và refresh token cũ ở lần đầu rồi gọi cho các lần tiếp theo
@@ -97,12 +101,15 @@ export const checkAndRefreshToken = async (params?: { onError?: () => void; onSu
 
         return params?.onError && params.onError();
     }
+
+    // Trường hợp force refresh khi lắng nghe được sự kiện refreshToken do socket IO bắn ra
+
     // Ví dụ access token của chúng ta có thời gian hết hạn là 10s
     // thì mình sẽ kiểm tra còn 1/3 thời gian (3s) thì mình sẽ cho refresh token lại
     // Thời gian còn lại sẽ tính dựa trên công thức: decodedAccessToken.exp - now
     // Thời gian hết hạn của access token dựa trên công thức: decodedAccessToken.exp - decodedAccessToken.iat
 
-    if (decodedAccessToken.exp - now < (decodedAccessToken.exp - decodedAccessToken.iat) / 3) {
+    if (params?.force || decodedAccessToken.exp - now < (decodedAccessToken.exp - decodedAccessToken.iat) / 3) {
         try {
             const role = decodedRefreshToken.role;
             const res =
@@ -125,6 +132,17 @@ export const formatCurrency = (number: number) => {
         style: "currency",
         currency: "VND",
     }).format(number);
+};
+
+export const getVietnameseRoleName = (name: (typeof Role)[keyof typeof Role]) => {
+    switch (name) {
+        case Role.Employee:
+            return "Nhân viên";
+        case Role.Owner:
+            return "Quản lý";
+        default:
+            return "Khách";
+    }
 };
 
 export const getVietnameseDishStatus = (status: (typeof DishStatus)[keyof typeof DishStatus]) => {

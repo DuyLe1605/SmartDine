@@ -13,7 +13,7 @@ import Link from "next/link";
 import { useLogoutMutation } from "@/queries/useAuth";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { generateAvatarName, handleErrorApi } from "@/lib/utils";
+import { generateAvatarName, getVietnameseRoleName, handleErrorApi } from "@/lib/utils";
 import { useAccountMe } from "@/queries/useAccount";
 import useAppStore from "@/zustand/useAppStore";
 import {
@@ -27,9 +27,11 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { Badge } from "@/components/ui/badge";
 
 export default function DropdownAvatar() {
     const logoutMutation = useLogoutMutation();
+    const role = useAppStore((state) => state.role);
     const router = useRouter();
     const { data } = useAccountMe({ uniqueKey: "dropdown-avatar" });
     const account = data?.payload.data;
@@ -60,7 +62,12 @@ export default function DropdownAvatar() {
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                    <DropdownMenuLabel>{account?.name}</DropdownMenuLabel>
+                    <DropdownMenuLabel>
+                        <div className="flex items-center">
+                            <span className="mr-3"> {account?.name}</span>{" "}
+                            <Badge variant="secondary">{getVietnameseRoleName(role!)}</Badge>
+                        </div>
+                    </DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem asChild>
                         <Link href={"/manage/setting"} className="cursor-pointer">
