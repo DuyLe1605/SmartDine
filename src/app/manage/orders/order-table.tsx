@@ -35,8 +35,9 @@ import TableSkeleton from "@/app/manage/orders/table-skeleton";
 import { GuestCreateOrdersResType } from "@/schemaValidations/guest.schema";
 import { useGetOrderListQuery, useUpdateOrderMutation } from "@/queries/useOrder";
 import { useGetTableList } from "@/queries/useTable";
-import socket from "@/socket";
+
 import { toast } from "sonner";
+import useAppStore from "@/zustand/useAppStore";
 
 export const OrderTableContext = createContext({
     setOrderIdEdit: (value: number | undefined) => {},
@@ -69,6 +70,8 @@ export default function OrderTable() {
     const page = searchParam.get("page") ? Number(searchParam.get("page")) : 1;
     const pageIndex = page - 1;
     const [orderIdEdit, setOrderIdEdit] = useState<number | undefined>();
+    // Socket io
+    const socket = useAppStore((state) => state.socket);
 
     // Queries
     const getOrderListQuery = useGetOrderListQuery({ fromDate, toDate });
@@ -135,7 +138,7 @@ export default function OrderTable() {
 
     // Socket IO
     useEffect(() => {
-        if (socket.connected) {
+        if (socket?.connected) {
             onConnect();
         }
 
@@ -147,7 +150,7 @@ export default function OrderTable() {
         }
 
         function onConnect() {
-            console.log("socket.id: ", socket.id);
+            console.log("socket.id: ", socket?.id);
         }
 
         function onDisconnect() {
@@ -178,21 +181,21 @@ export default function OrderTable() {
             );
         }
 
-        socket.on("update-order", onUpdateOrder);
-        socket.on("payment", onPayment);
-        socket.on("new-order", onNewOrder);
-        socket.on("connect", onConnect);
-        socket.on("disconnect", onDisconnect);
+        socket?.on("update-order", onUpdateOrder);
+        socket?.on("payment", onPayment);
+        socket?.on("new-order", onNewOrder);
+        socket?.on("connect", onConnect);
+        socket?.on("disconnect", onDisconnect);
 
         return () => {
             // Chúng ta on những cái nào thì khi clean up phải clean up cái đó
-            socket.off("connect", onConnect);
-            socket.off("disconnect", onDisconnect);
-            socket.off("update-order", onUpdateOrder);
-            socket.off("new-order", onNewOrder);
-            socket.off("payment", onPayment);
+            socket?.off("connect", onConnect);
+            socket?.off("disconnect", onDisconnect);
+            socket?.off("update-order", onUpdateOrder);
+            socket?.off("new-order", onNewOrder);
+            socket?.off("payment", onPayment);
         };
-    }, [orderListRefetch, fromDate, toDate]);
+    }, [orderListRefetch, fromDate, toDate, socket]);
 
     const resetDateFilter = () => {
         setFromDate(initFromDate);

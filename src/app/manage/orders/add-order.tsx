@@ -94,7 +94,7 @@ export default function AddOrder() {
             }
 
             // Trường hợp không chọn khách,sẽ không thể submit
-            console.log(guestId);
+
             if (!guestId) {
                 toast.error("Hãy chọn khách để thêm đơn hàng !");
                 return;

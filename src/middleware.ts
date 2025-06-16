@@ -28,7 +28,6 @@ export function middleware(request: NextRequest) {
 
         // Đăng nhập rồi thì không cho vào trang login nữa
         if (authPaths.some((path) => pathname.startsWith(path))) {
-            console.log(pathname, authPaths);
             return NextResponse.redirect(new URL("/", request.url));
         }
 

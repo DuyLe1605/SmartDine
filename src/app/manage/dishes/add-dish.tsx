@@ -100,7 +100,7 @@ export default function AddDish() {
                         className="grid auto-rows-max items-start gap-4 md:gap-8"
                         id="add-dish-form"
                         onSubmit={form.handleSubmit(onSubmit, (error) => {
-                            console.log(error);
+                            console.error(error);
                             if ("image" in error) {
                                 toast("Hãy tải lên hình ảnh món ăn !");
                             }

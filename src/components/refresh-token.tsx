@@ -2,7 +2,7 @@
 
 import { checkAndRefreshToken } from "@/lib/utils";
 import { AccountResType } from "@/schemaValidations/account.schema";
-import socket from "@/socket";
+
 import useAppStore from "@/zustand/useAppStore";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -12,8 +12,9 @@ const UNAUTHENTICATED_PATHS = ["/login", "/register", "/refresh-token"];
 export default function RefreshToken() {
     const pathname = usePathname();
     const router = useRouter();
-    const role = useAppStore((state) => state.role);
+    const socket = useAppStore((state) => state.socket);
     const setRole = useAppStore((state) => state.setRole);
+    const disconnectSocket = useAppStore((state) => state.disconnectSocket);
     useEffect(() => {
         if (UNAUTHENTICATED_PATHS.includes(pathname)) return;
         let interval: any = null;
@@ -58,6 +59,7 @@ export default function RefreshToken() {
                 onError: () => {
                     clearInterval(interval);
                     toast.error("refreshToken hết hạn, vui lòng đăng nhập lại !", { duration: 4000 });
+                    disconnectSocket();
                     setRole();
                     router.push("/login");
                 },
@@ -74,12 +76,13 @@ export default function RefreshToken() {
         interval = setInterval(onRefreshToken, TIMEOUT);
 
         // Socket lắng nghe sự kiện refresh Token
-        if (socket.connected) {
+
+        if (socket?.connected) {
             onConnect();
         }
 
         function onConnect() {
-            console.log("socket.id: ", socket.id);
+            console.log("socket.id: ", socket?.id);
         }
 
         function onDisconnect() {
@@ -94,16 +97,16 @@ export default function RefreshToken() {
             });
         }
 
-        socket.on("connect", onConnect);
-        socket.on("disconnect", onDisconnect);
-        socket.on("refresh-token", onRefreshTokenSocket);
+        socket?.on("connect", onConnect);
+        socket?.on("disconnect", onDisconnect);
+        socket?.on("refresh-token", onRefreshTokenSocket);
         return () => {
             clearInterval(interval);
             // Nhớ phải clean up
-            socket.off("connect", onConnect);
-            socket.off("disconnect", onDisconnect);
-            socket.off("refresh-token", onRefreshTokenSocket);
+            socket?.off("connect", onConnect);
+            socket?.off("disconnect", onDisconnect);
+            socket?.off("refresh-token", onRefreshTokenSocket);
         };
-    }, [pathname]);
+    }, [pathname, router, socket, disconnectSocket]);
     return null;
 }

@@ -6,7 +6,7 @@ import { OrderStatus } from "@/constants/type";
 import { formatCurrency, getVietnameseOrderStatus } from "@/lib/utils";
 import { useGetGuestOrderListQuery, useGuestLogoutMutation } from "@/queries/useGuest";
 import { PayGuestOrdersResType, UpdateOrderResType } from "@/schemaValidations/order.schema";
-import socket from "@/socket";
+
 import useAppStore from "@/zustand/useAppStore";
 import { CheckCircle } from "lucide-react";
 import Image from "next/image";
@@ -18,7 +18,9 @@ import { toast } from "sonner";
 export default function OrderCart() {
     const { data, refetch } = useGetGuestOrderListQuery();
     const setRole = useAppStore((state) => state.setRole);
+    const socket = useAppStore((state) => state.socket);
     const { mutateAsync } = useGuestLogoutMutation();
+
     const router = useRouter();
     const orders = data?.payload.data || [];
     const { unPaid, paid } = orders.reduce(
@@ -56,12 +58,12 @@ export default function OrderCart() {
 
     // Socket IO
     useEffect(() => {
-        if (socket.connected) {
+        if (socket?.connected) {
             onConnect();
         }
 
         function onConnect() {
-            console.log("socket.id: ", socket.id);
+            console.log("socket.id: ", socket?.id);
         }
 
         function onDisconnect() {
@@ -100,16 +102,16 @@ export default function OrderCart() {
             }, 1000 * 10);
         }
 
-        socket.on("update-order", onUpdateOrder);
-        socket.on("connect", onConnect);
-        socket.on("disconnect", onDisconnect);
-        socket.on("payment", onPayment);
+        socket?.on("update-order", onUpdateOrder);
+        socket?.on("connect", onConnect);
+        socket?.on("disconnect", onDisconnect);
+        socket?.on("payment", onPayment);
         return () => {
             // Nhớ phải clean up
-            socket.off("connect", onConnect);
-            socket.off("disconnect", onDisconnect);
-            socket.off("update-order", onUpdateOrder);
-            socket.off("payment", onPayment);
+            socket?.off("connect", onConnect);
+            socket?.off("disconnect", onDisconnect);
+            socket?.off("update-order", onUpdateOrder);
+            socket?.off("payment", onPayment);
         };
     }, [refetch, mutateAsync, setRole, router]);
 

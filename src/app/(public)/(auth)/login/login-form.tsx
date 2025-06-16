@@ -13,6 +13,7 @@ import { handleErrorApi } from "@/lib/utils";
 import { useRouter, useSearchParams } from "next/navigation";
 import useAppStore from "@/zustand/useAppStore";
 import { useEffect } from "react";
+import { generateSocketInstance } from "@/lib/socket";
 
 export default function LoginForm() {
     const loginMutation = useLoginMutation();
@@ -20,6 +21,8 @@ export default function LoginForm() {
     const searchParams = useSearchParams();
     const clearToken = searchParams.get("clearToken");
     const setRole = useAppStore((state) => state.setRole);
+    const setSocket = useAppStore((state) => state.setSocket);
+
     const form = useForm<LoginBodyType>({
         resolver: zodResolver(LoginBody),
         defaultValues: {
@@ -41,6 +44,7 @@ export default function LoginForm() {
 
             setRole(result.payload.data.account.role);
             router.push("/manage/dashboard");
+            setSocket(generateSocketInstance(result.payload.data.accessToken));
 
             // setIsAuth(true);
             toast.success(result.payload.message);

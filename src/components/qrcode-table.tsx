@@ -35,7 +35,7 @@ export default function QrCodeTable({ tableNumber, token, width = 250 }: Props) 
         const virtualCanvas = document.createElement("canvas");
         QRCode.toCanvas(virtualCanvas, tableLink, function (error) {
             if (error) console.error(error);
-            console.log("success!");
+
             canvasContext.drawImage(virtualCanvas, 0, 0, width, width);
         });
     }, [tableNumber, token, width]);

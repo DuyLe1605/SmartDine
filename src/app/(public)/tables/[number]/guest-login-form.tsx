@@ -12,6 +12,7 @@ import { useEffect } from "react";
 import { useGuestLoginMutation } from "@/queries/useGuest";
 import { handleErrorApi } from "@/lib/utils";
 import useAppStore from "@/zustand/useAppStore";
+import { generateSocketInstance } from "@/lib/socket";
 
 export default function GuestLoginForm() {
     const router = useRouter();
@@ -20,6 +21,7 @@ export default function GuestLoginForm() {
     const token = searchParams.get("token");
     const tableNumber = Number(params.number)!;
     const setRole = useAppStore((state) => state.setRole);
+    const setSocket = useAppStore((state) => state.setSocket);
     const form = useForm<GuestLoginBodyType>({
         resolver: zodResolver(GuestLoginBody),
         defaultValues: {
@@ -41,6 +43,7 @@ export default function GuestLoginForm() {
         try {
             const loginRes = await guestLoginMutation.mutateAsync(values);
             setRole(loginRes.payload.data.guest.role);
+            setSocket(generateSocketInstance(loginRes.payload.data.accessToken));
             router.push("/guest/menu");
         } catch (error: any) {
             handleErrorApi({ error, setError: form.setError });

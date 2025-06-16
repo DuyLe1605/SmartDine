@@ -128,7 +128,7 @@ export default function EditEmployee({
                         noValidate
                         className="grid auto-rows-max items-start gap-4 md:gap-8"
                         id="edit-employee-form"
-                        onSubmit={form.handleSubmit(onSubmit, (error) => console.log(error))}
+                        onSubmit={form.handleSubmit(onSubmit, (error) => console.error(error))}
                     >
                         <div className="grid gap-4 py-4">
                             <FormField

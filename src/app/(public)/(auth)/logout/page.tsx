@@ -2,6 +2,7 @@
 
 import { getAccessTokenFromLs, getRefreshTokenFromLs } from "@/lib/utils";
 import { useLogoutMutation } from "@/queries/useAuth";
+import useAppStore from "@/zustand/useAppStore";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useRef } from "react";
 
@@ -12,6 +13,8 @@ function Logout() {
     const mutateRef = useRef<any>(null);
     const refreshTokenFromUrl = searchParams.get("refreshToken");
     const accessTokenFromUrl = searchParams.get("accessToken");
+    const setRole = useAppStore((state) => state.setRole);
+    const disconnectSocket = useAppStore((state) => state.disconnectSocket);
     useEffect(() => {
         // mutateRef.current: Tránh bị duplicate request
         // (!accessTokenFromURL) || (!refreshTokenFromURL) : Tránh trường hợp khi không có refreshToken mà người dùng vào link Logout
@@ -31,6 +34,8 @@ function Logout() {
             setTimeout(() => {
                 mutateRef.current = null;
             }, 2000);
+            setRole();
+            disconnectSocket();
             router.push("/login");
         });
     }, [mutateAsync, refreshTokenFromUrl, router]);

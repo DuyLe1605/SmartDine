@@ -31,7 +31,6 @@ export default function AddTable() {
         if (addTableMutation.isPending) return;
 
         try {
-            console.log(values);
             const result = await addTableMutation.mutateAsync(values);
             setOpen(false);
             toast(result.payload.message);
