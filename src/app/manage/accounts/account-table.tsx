@@ -44,7 +44,7 @@ import {
 import { useSearchParams } from "next/navigation";
 import AutoPagination from "@/components/auto-pagination";
 import { useDeleteEmployee, useGetAccountList } from "@/queries/useAccount";
-import { handleErrorApi } from "@/lib/utils";
+import { decodeToken, getRefreshTokenFromLs, handleErrorApi } from "@/lib/utils";
 import { toast } from "sonner";
 
 type AccountItem = AccountListResType["data"][0];
@@ -100,12 +100,26 @@ export const columns: ColumnDef<AccountType>[] = [
         enableHiding: false,
         cell: function Actions({ row }) {
             const { setEmployeeIdEdit, setEmployeeDelete } = useContext(AccountTableContext);
+
+            const checkPermission = (message?: string) => {
+                if (!message) message = "Bạn không có quyền thao tác với tài khoản của admin tối cao!";
+
+                const accountId = decodeToken(getRefreshTokenFromLs()!).userId; // Id của tài khoản đang login
+                const changeId = row.original.id; // Id của tài khoản định thay đổi
+                if (changeId === 1 && accountId !== changeId) {
+                    toast.error(message);
+                    return false;
+                }
+                return true;
+            };
             const openEditEmployee = () => {
-                setEmployeeIdEdit(row.original.id);
+                if (checkPermission("Bạn không có quyển chỉnh sửa tài khoản của Admin tối cao (BOSS) !!!"))
+                    setEmployeeIdEdit(row.original.id);
             };
 
             const openDeleteEmployee = () => {
-                setEmployeeDelete(row.original);
+                if (checkPermission("Bạn không có quyển xóa tài khoản của Admin tối cao (BOSS) !!!"))
+                    setEmployeeDelete(row.original);
             };
             return (
                 <DropdownMenu modal={false}>

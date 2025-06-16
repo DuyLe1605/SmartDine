@@ -15,14 +15,21 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Upload } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Switch } from "@/components/ui/switch";
-import { Role } from "@/constants/type";
+import { Role, RoleValues } from "@/constants/type";
 import { useGetAccount, useUpdateEmployee } from "@/queries/useAccount";
 import { useUploadMediaMutation } from "@/queries/useMedia";
 import { toast } from "sonner";
-import { generateAvatarName, handleErrorApi } from "@/lib/utils";
+import {
+    decodeToken,
+    generateAvatarName,
+    getAccessTokenFromLs,
+    getRefreshTokenFromLs,
+    handleErrorApi,
+} from "@/lib/utils";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export default function EditEmployee({
     id,
@@ -187,6 +194,52 @@ export default function EditEmployee({
                                                 <Input id="email" className="w-full" {...field} />
                                                 <FormMessage />
                                             </div>
+                                        </div>
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="role"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <div className="grid grid-cols-4 items-center justify-items-start gap-4">
+                                            <Label htmlFor="description">Trạng thái</Label>
+                                            <div className="col-span-3 w-full space-y-2">
+                                                <Select
+                                                    onValueChange={(value) => {
+                                                        const accountId = decodeToken(getRefreshTokenFromLs()!).userId;
+                                                        const changeId = data?.payload.data.id;
+
+                                                        if (changeId === 1 && accountId !== changeId) {
+                                                            toast.error(
+                                                                "Bạn không có quyền thay đổi vai trò của admin tối cao!"
+                                                            );
+                                                            return;
+                                                        }
+                                                        field.onChange(value);
+                                                    }}
+                                                    value={field.value}
+                                                >
+                                                    <FormControl>
+                                                        <SelectTrigger>
+                                                            <SelectValue placeholder="Chọn trạng thái" />
+                                                        </SelectTrigger>
+                                                    </FormControl>
+                                                    <SelectContent>
+                                                        {RoleValues.map((status) => {
+                                                            if (status === Role.Guest) return null;
+                                                            return (
+                                                                <SelectItem key={status} value={status}>
+                                                                    {status}
+                                                                </SelectItem>
+                                                            );
+                                                        })}
+                                                    </SelectContent>
+                                                </Select>
+                                            </div>
+
+                                            <FormMessage />
                                         </div>
                                     </FormItem>
                                 )}
