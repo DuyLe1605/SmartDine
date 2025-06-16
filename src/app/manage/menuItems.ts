@@ -1,37 +1,44 @@
-import { Home, LineChart, ShoppingCart, Users2, Salad, Table } from 'lucide-react'
+import { Role } from "@/constants/type";
+import { Home, LineChart, ShoppingCart, Users2, Salad, Table } from "lucide-react";
 
 const menuItems = [
-  {
-    title: 'Dashboard',
-    Icon: Home,
-    href: '/manage/dashboard'
-  },
-  {
-    title: 'Đơn hàng',
-    Icon: ShoppingCart,
-    href: '/manage/orders'
-  },
-  {
-    title: 'Bàn ăn',
-    Icon: Table,
-    href: '/manage/tables'
-  },
-  {
-    title: 'Món ăn',
-    Icon: Salad,
-    href: '/manage/dishes'
-  },
+    {
+        title: "Dashboard",
+        Icon: Home,
+        href: "/manage/dashboard",
+        roles: [Role.Owner, Role.Employee],
+    },
+    {
+        title: "Đơn hàng",
+        Icon: ShoppingCart,
+        href: "/manage/orders",
+        roles: [Role.Owner, Role.Employee],
+    },
+    {
+        title: "Bàn ăn",
+        Icon: Table,
+        href: "/manage/tables",
+        roles: [Role.Owner, Role.Employee],
+    },
+    {
+        title: "Món ăn",
+        Icon: Salad,
+        href: "/manage/dishes",
+        roles: [Role.Owner, Role.Employee],
+    },
 
-  {
-    title: 'Phân tích',
-    Icon: LineChart,
-    href: '/manage/analytics'
-  },
-  {
-    title: 'Nhân viên',
-    Icon: Users2,
-    href: '/manage/accounts'
-  }
-]
+    {
+        title: "Phân tích",
+        Icon: LineChart,
+        href: "/manage/analytics",
+        roles: [Role.Owner, Role.Employee],
+    },
+    {
+        title: "Nhân viên",
+        Icon: Users2,
+        href: "/manage/accounts",
+        roles: [Role.Owner],
+    },
+];
 
-export default menuItems
+export default menuItems;

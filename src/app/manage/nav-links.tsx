@@ -2,13 +2,14 @@
 import menuItems from "@/app/manage/menuItems";
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
+import useAppStore from "@/zustand/useAppStore";
 import { Package2, Settings } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 export default function NavLinks() {
     const pathname = usePathname();
-
+    const role = useAppStore((state) => state.role);
     return (
         <TooltipProvider>
             <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
@@ -23,6 +24,7 @@ export default function NavLinks() {
 
                     {menuItems.map((Item, index) => {
                         const isActive = pathname === Item.href;
+                        if (!Item.roles.includes(role as any)) return null;
                         return (
                             <Tooltip key={index}>
                                 <TooltipTrigger asChild>
