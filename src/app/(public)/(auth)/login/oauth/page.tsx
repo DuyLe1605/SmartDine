@@ -34,7 +34,15 @@ export default function OAuthPage() {
             }
             count.current++;
         } else {
-            toast(message || "Đã có lỗi xảy ra khi đăng nhập bằng Google");
+            if (count.current === 0) {
+                // SetTimeout để fix lỗi không toast khi vào trang
+                setTimeout(() => {
+                    toast(message || "Đã có lỗi xảy ra khi đăng nhập bằng Google");
+                });
+
+                router.push("/login");
+            }
+            count.current++;
         }
     }, [accessToken, refreshToken, setRole, router, message, setSocket, mutateAsync]);
 
