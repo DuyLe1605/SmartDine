@@ -1,5 +1,6 @@
 "use client";
 
+import { Role } from "@/constants/type";
 import { checkAndRefreshToken } from "@/lib/utils";
 import { AccountResType } from "@/schemaValidations/account.schema";
 
@@ -15,6 +16,7 @@ export default function RefreshToken() {
     const socket = useAppStore((state) => state.socket);
     const setRole = useAppStore((state) => state.setRole);
     const disconnectSocket = useAppStore((state) => state.disconnectSocket);
+    console.log(pathname);
     useEffect(() => {
         if (UNAUTHENTICATED_PATHS.includes(pathname)) return;
         let interval: any = null;
@@ -94,6 +96,9 @@ export default function RefreshToken() {
             const { role } = data;
             onRefreshToken(true, () => {
                 setRole(role);
+                if (role === Role.Employee && pathname === "/manage/accounts") {
+                    router.push("/manage/dashboard");
+                }
             });
         }
 
