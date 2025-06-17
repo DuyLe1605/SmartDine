@@ -213,3 +213,15 @@ export const OrderStatusIcon = {
     [OrderStatus.Delivered]: Truck,
     [OrderStatus.Paid]: HandCoins,
 };
+
+export const serverApiWrapper = async <T>(fn: () => Promise<T>) => {
+    let result = null;
+    try {
+        result = await fn();
+    } catch (error: any) {
+        if (error.digest?.includes("NEXT_REDIRECT")) {
+            throw error;
+        }
+    }
+    return result;
+};

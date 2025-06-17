@@ -96,6 +96,7 @@ export default function RefreshToken() {
             const { role } = data;
             onRefreshToken(true, () => {
                 setRole(role);
+                // Nếu tài khoản bị đổi thành role Employee và vẫn ở trang accounts, mình phải chuyển trang
                 if (role === Role.Employee && pathname === "/manage/accounts") {
                     router.push("/manage/dashboard");
                 }
