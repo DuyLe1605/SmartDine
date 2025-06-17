@@ -1,6 +1,7 @@
 "use client";
 
 import RefreshToken from "@/components/refresh-token";
+import SocketLogoutListener from "@/components/socket-logou-listenert";
 import { generateSocketInstance } from "@/lib/socket";
 import { decodeToken, getAccessTokenFromLs } from "@/lib/utils";
 import useAppStore from "@/zustand/useAppStore";
@@ -43,6 +44,7 @@ export default function AppProvider({
         <QueryClientProvider client={queryClient}>
             {children}
             <RefreshToken />
+            <SocketLogoutListener />
             <ReactQueryDevtools initialIsOpen={false} />
         </QueryClientProvider>
     );

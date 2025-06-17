@@ -18,6 +18,7 @@ import { toast } from "sonner";
 export default function OrderCart() {
     const { data, refetch } = useGetGuestOrderListQuery();
     const setRole = useAppStore((state) => state.setRole);
+    const disconnectSocket = useAppStore((state) => state.disconnectSocket);
     const socket = useAppStore((state) => state.socket);
     const { mutateAsync } = useGuestLogoutMutation();
 
@@ -98,6 +99,7 @@ export default function OrderCart() {
             setTimeout(async () => {
                 await mutateAsync();
                 setRole();
+                disconnectSocket();
                 router.push("/");
             }, 1000 * 10);
         }
