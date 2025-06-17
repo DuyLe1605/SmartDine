@@ -141,6 +141,10 @@ const request = async <Response>(
             const { accessToken, refreshToken } = (payload as LoginResType).data;
             saveAccessTokenToLS(accessToken);
             saveRefreshTokenToLS(refreshToken);
+        } else if (normalizeUrl === "api/auth/token") {
+            const { accessToken, refreshToken } = payload as { accessToken: string; refreshToken: string };
+            saveAccessTokenToLS(accessToken);
+            saveRefreshTokenToLS(refreshToken);
         } else if (["api/auth/logout", "api/guest/auth/logout"].includes(normalizeUrl)) {
             clearTokensFormLS();
         }
