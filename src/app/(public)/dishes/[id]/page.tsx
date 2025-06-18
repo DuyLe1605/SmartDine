@@ -3,9 +3,9 @@ import DishDetail from "@/app/(public)/dishes/[id]/dish-detail";
 import { serverApiWrapper } from "@/lib/utils";
 
 interface Props {
-    params: {
+    params: Promise<{
         id: string;
-    };
+    }>;
 }
 
 export default async function DishPage({ params }: Props) {

@@ -5,10 +5,10 @@ import { decodeToken } from "@/lib/utils";
 import { useSetTokenToCookieMutation } from "@/queries/useAuth";
 import useAppStore from "@/zustand/useAppStore";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { Suspense, useEffect, useRef } from "react";
 import { toast } from "sonner";
 
-export default function OAuthPage() {
+function OAuth() {
     const setRole = useAppStore((state) => state.setRole);
     const setSocket = useAppStore((state) => state.setSocket);
     const { mutateAsync } = useSetTokenToCookieMutation();
@@ -47,4 +47,12 @@ export default function OAuthPage() {
     }, [accessToken, refreshToken, setRole, router, message, setSocket, mutateAsync]);
 
     return null;
+}
+
+export default function OAuthPage() {
+    return (
+        <Suspense>
+            <OAuth />
+        </Suspense>
+    );
 }

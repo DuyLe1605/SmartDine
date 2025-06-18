@@ -5,9 +5,9 @@ import { formatCurrency, serverApiWrapper } from "@/lib/utils";
 import Image from "next/image";
 
 interface Props {
-    params: {
+    params: Promise<{
         id: string;
-    };
+    }>;
 }
 
 export default async function InterceptingDishPage({ params }: Props) {
@@ -26,14 +26,11 @@ export default async function InterceptingDishPage({ params }: Props) {
                 <div className="space-y-4 container mx-auto">
                     <h1 className="text-2xl lg:text-3xl font-semibold">{dish.name}</h1>
                     <div className="font-semibold">Giá: {formatCurrency(dish.price)}</div>
-                    <Image
-                        src={dish.image}
-                        width={700}
-                        height={700}
-                        quality={100}
-                        alt={dish.name}
-                        className="object-cover w-full h-full max-w-[1080px] max-h-[1080px] rounded-md"
-                    />
+
+                    <div className="w-full  aspect-square overflow-hidden rounded-md mx-auto relative">
+                        <Image src={dish.image} alt={dish.name} fill quality={100} className="object-cover" />
+                    </div>
+
                     <p>{dish.description}</p>
                 </div>
             )}
