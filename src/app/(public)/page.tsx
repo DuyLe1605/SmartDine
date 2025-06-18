@@ -3,6 +3,7 @@ import { formatCurrency } from "@/lib/utils";
 import { DishListResType } from "@/schemaValidations/dish.schema";
 import Image from "next/image";
 import { Skeleton } from "@/components/ui/skeleton";
+import Link from "next/link";
 
 export default async function Home() {
     let dishList: DishListResType["data"] = [];
@@ -40,13 +41,15 @@ export default async function Home() {
                         dishList.map((item, index) => (
                             <div className="flex gap-4 w" key={index}>
                                 <div className="flex-shrink-0">
-                                    <Image
-                                        src={item.image}
-                                        alt={item.name}
-                                        width={150}
-                                        height={150}
-                                        className="w-[150px] h-[150px] object-cover rounded-md"
-                                    />
+                                    <Link href={`/dishes/${item.id}`}>
+                                        <Image
+                                            src={item.image}
+                                            alt={item.name}
+                                            width={150}
+                                            height={150}
+                                            className="w-[150px] h-[150px] object-cover rounded-md"
+                                        />
+                                    </Link>
                                 </div>
                                 <div className="space-y-1">
                                     <h3 className="text-xl font-semibold">{item.name}</h3>
