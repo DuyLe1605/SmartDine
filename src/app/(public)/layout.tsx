@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import ThemeToggle from "@/components/theme-toggle";
 import NavItems from "@/app/(public)/nav-items";
+import LocaleSwitcher from "@/components/locale-switcher";
 
 export default function Layout({
     children,
@@ -44,7 +45,8 @@ export default function Layout({
                         </nav>
                     </SheetContent>
                 </Sheet>
-                <div className="ml-auto">
+                <div className="flex ml-auto">
+                    <LocaleSwitcher />
                     <ThemeToggle />
                 </div>
             </header>

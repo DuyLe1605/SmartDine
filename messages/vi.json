@@ -1,5 +1,10 @@
 {
     "HomePage": {
         "title": "Nhà hàng Smart Dine"
+    },
+    "LocaleSwitcher": {
+        "vi": "Tiếng Việt",
+        "en": "Tiếng Anh",
+        "label": "Ngôn Ngữ"
     }
 }
