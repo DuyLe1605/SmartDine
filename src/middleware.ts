@@ -61,6 +61,7 @@ export function middleware(request: NextRequest) {
             const url = new URL(`/${locale}/refresh-token`, request.url);
             url.searchParams.set("refreshToken", refreshToken);
             url.searchParams.set("redirect", pathname);
+            console.log("pathname:", "/manage/dashboard");
             return NextResponse.redirect(url);
             // response.headers.set("x-middleware-rewrite", url.toString());
             // return response;
@@ -80,13 +81,13 @@ export function middleware(request: NextRequest) {
             // return response;
         }
 
-        if (pathname === "/manage") {
+        if (pathname === `/${locale}/manage`) {
             return NextResponse.redirect(new URL(`/${locale}/manage/dashboard`, request.url));
             // const url = new URL("/manage/dashboard", request.url);
             // response.headers.set("x-middleware-rewrite", url.toString());
             // return response;
         }
-        if (pathname === "/guest") {
+        if (pathname === `/${locale}/guest`) {
             return NextResponse.redirect(new URL(`/${locale}/guest/menu`, request.url));
             // const url = new URL("/guest/menu", request.url);
             // response.headers.set("x-middleware-rewrite", url.toString());

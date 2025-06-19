@@ -1,12 +1,13 @@
 "use client";
 
-import { useRouter } from "@/i18n/navigation";
 import { checkAndRefreshToken, getRefreshTokenFromLs } from "@/lib/utils";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect } from "react";
 
 function RefreshToken() {
     const searchParams = useSearchParams();
+    // redirectPathname ở đây sẽ là /[locale]/...
+    // vậy nên nếu import từ @/i18n thì sẽ bị redirect tới /[locale]/[locale]/...
     const router = useRouter();
 
     const refreshTokenFromUrl = searchParams.get("refreshToken");
