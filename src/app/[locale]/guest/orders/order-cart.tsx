@@ -10,8 +10,8 @@ import { PayGuestOrdersResType, UpdateOrderResType } from "@/schemaValidations/o
 import useAppStore from "@/zustand/useAppStore";
 import { CheckCircle } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { Link } from "@/i18n/navigation";
+import { useRouter } from "@/i18n/navigation";
 import { useEffect } from "react";
 import { toast } from "sonner";
 

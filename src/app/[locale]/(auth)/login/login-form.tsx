@@ -10,12 +10,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useLoginMutation } from "@/queries/useAuth";
 import { toast } from "sonner";
 import { handleErrorApi } from "@/lib/utils";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import useAppStore from "@/zustand/useAppStore";
 import { useEffect } from "react";
 import { generateSocketInstance } from "@/lib/socket";
 import envConfig from "@/config";
-import Link from "next/link";
+import { Link, useRouter } from "@/i18n/navigation";
 
 export default function LoginForm() {
     const loginMutation = useLoginMutation();

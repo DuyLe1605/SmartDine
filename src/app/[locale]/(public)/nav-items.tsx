@@ -6,8 +6,8 @@ import { useLogoutMutation } from "@/queries/useAuth";
 import { useGuestLogoutMutation } from "@/queries/useGuest";
 import { RoleType } from "@/types/jwt.types";
 import useAppStore from "@/zustand/useAppStore";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { Link } from "@/i18n/navigation";
+import { useRouter } from "@/i18n/navigation";
 import { toast } from "sonner";
 import {
     AlertDialog,

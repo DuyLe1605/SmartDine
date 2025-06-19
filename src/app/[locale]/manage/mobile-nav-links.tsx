@@ -5,8 +5,7 @@ import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTr
 import { cn } from "@/lib/utils";
 import useAppStore from "@/zustand/useAppStore";
 import { Package2, PanelLeft } from "lucide-react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { Link, usePathname } from "@/i18n/navigation";
 
 export default function MobileNavLinks() {
     const pathname = usePathname();

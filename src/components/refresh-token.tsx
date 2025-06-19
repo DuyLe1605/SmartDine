@@ -1,11 +1,12 @@
 "use client";
 
 import { Role } from "@/constants/type";
+import { usePathname, useRouter } from "@/i18n/navigation";
 import { checkAndRefreshToken } from "@/lib/utils";
 import { AccountResType } from "@/schemaValidations/account.schema";
 
 import useAppStore from "@/zustand/useAppStore";
-import { usePathname, useRouter } from "next/navigation";
+
 import { useEffect } from "react";
 import { toast } from "sonner";
 

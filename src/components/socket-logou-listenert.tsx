@@ -3,7 +3,7 @@
 import { handleErrorApi } from "@/lib/utils";
 import { useLogoutMutation } from "@/queries/useAuth";
 import useAppStore from "@/zustand/useAppStore";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter } from "@/i18n/navigation";
 import { useEffect } from "react";
 
 const UNAUTHENTICATED_PATHS = ["/login", "/register", "/refresh-token"];

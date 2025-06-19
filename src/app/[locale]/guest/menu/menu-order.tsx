@@ -8,7 +8,7 @@ import { GuestCreateOrdersBodyType } from "@/schemaValidations/guest.schema";
 import { useState } from "react";
 import { DishStatus } from "@/constants/type";
 import { useGuestOrderMutation } from "@/queries/useGuest";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/navigation";
 import { toast } from "sonner";
 import Quantity from "@/app/[locale]/guest/menu/quantity";
 

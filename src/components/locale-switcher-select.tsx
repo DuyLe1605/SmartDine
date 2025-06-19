@@ -12,6 +12,8 @@ import {
 import { Locale } from "@/i18n/config";
 import { Languages } from "lucide-react";
 import { useLocale } from "next-intl";
+
+// Chỗ này nên giữ nguyên, không nên đổi sang dùng ở thu mục i18n vì sẽ bị lỗi
 import { useParams, usePathname, useRouter, useSearchParams } from "next/navigation";
 
 type Props = {

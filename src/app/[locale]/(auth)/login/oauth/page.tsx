@@ -1,10 +1,11 @@
 "use client";
 
+import { useRouter } from "@/i18n/navigation";
 import { generateSocketInstance } from "@/lib/socket";
 import { decodeToken } from "@/lib/utils";
 import { useSetTokenToCookieMutation } from "@/queries/useAuth";
 import useAppStore from "@/zustand/useAppStore";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useRef } from "react";
 import { toast } from "sonner";
 
