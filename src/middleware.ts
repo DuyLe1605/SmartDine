@@ -25,7 +25,7 @@ import createMiddleware from "next-intl/middleware";
 import { routing } from "./i18n/routing";
 // HOW TO : https://stackoverflow.com/questions/77040517/how-to-rewrite-request-after-next-intl-middleware-receives-it
 
-// This function can be marked `async` if using `await` inside
+// Cái nào là redirect thì giữ nguyên
 export function middleware(request: NextRequest) {
     const handleI18nRouting = createMiddleware(routing);
 
@@ -34,14 +34,15 @@ export function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;
     const accessToken = request.cookies.get("accessToken")?.value;
     const refreshToken = request.cookies.get("refreshToken")?.value;
+    const locale = request.cookies.get("NEXT_LOCALE")?.value;
 
     // Chưa đăng nhập thì không cho vào protectedPaths
     if (protectedPaths.some((path) => pathname.startsWith(path)) && !refreshToken) {
-        const url = new URL("/login", request.url);
+        const url = new URL(`/${locale}/login`, request.url);
         url.searchParams.set("clearToken", "true");
-        // return NextResponse.redirect(url);
-        response.headers.set("x-middleware-rewrite", url.toString());
-        return response;
+        return NextResponse.redirect(url);
+        // response.headers.set("x-middleware-rewrite", url.toString());
+        // return response;
     }
 
     // Đăng nhập rồi
@@ -50,19 +51,19 @@ export function middleware(request: NextRequest) {
 
         // Đăng nhập rồi thì không cho vào trang login nữa
         if (authPaths.some((path) => pathname.startsWith(path))) {
-            // return NextResponse.redirect(new URL("/", request.url));
-            const url = new URL("/", request.url);
-            response.headers.set("x-middleware-rewrite", url.toString());
-            return response;
+            return NextResponse.redirect(new URL(`/${locale}`, request.url));
+            // const url = new URL("/", request.url);
+            // response.headers.set("x-middleware-rewrite", url.toString());
+            // return response;
         }
 
         if (protectedPaths.some((path) => pathname.startsWith(path)) && !accessToken) {
-            const url = new URL("/refresh-token", request.url);
+            const url = new URL(`/${locale}/refresh-token`, request.url);
             url.searchParams.set("refreshToken", refreshToken);
             url.searchParams.set("redirect", pathname);
-            // return NextResponse.redirect(url);
-            response.headers.set("x-middleware-rewrite", url.toString());
-            return response;
+            return NextResponse.redirect(url);
+            // response.headers.set("x-middleware-rewrite", url.toString());
+            // return response;
         }
 
         // Ngăn cho Guest không truy cập được vào trang quản lí
@@ -73,23 +74,23 @@ export function middleware(request: NextRequest) {
             onlyOwnerPaths.some((path) => pathname.startsWith(path)) && role !== Role.Owner;
 
         if (isGuestGoToManagePaths || isNotGuestGoToGuestPaths || isNotOwnerGoToOwnerPaths) {
-            // return NextResponse.redirect(new URL("/", request.url));
-            const url = new URL("/", request.url);
-            response.headers.set("x-middleware-rewrite", url.toString());
-            return response;
+            return NextResponse.redirect(new URL(`/${locale}`, request.url));
+            // const url = new URL("/", request.url);
+            // response.headers.set("x-middleware-rewrite", url.toString());
+            // return response;
         }
 
         if (pathname === "/manage") {
-            // return NextResponse.redirect(new URL("/manage/dashboard", request.url));
-            const url = new URL("/manage/dashboard", request.url);
-            response.headers.set("x-middleware-rewrite", url.toString());
-            return response;
+            return NextResponse.redirect(new URL(`/${locale}/manage/dashboard`, request.url));
+            // const url = new URL("/manage/dashboard", request.url);
+            // response.headers.set("x-middleware-rewrite", url.toString());
+            // return response;
         }
         if (pathname === "/guest") {
-            // return NextResponse.redirect(new URL("/guest/menu", request.url));
-            const url = new URL("/guest/menu", request.url);
-            response.headers.set("x-middleware-rewrite", url.toString());
-            return response;
+            return NextResponse.redirect(new URL(`/${locale}/guest/menu`, request.url));
+            // const url = new URL("/guest/menu", request.url);
+            // response.headers.set("x-middleware-rewrite", url.toString());
+            // return response;
         }
 
         // return NextResponse.next();
