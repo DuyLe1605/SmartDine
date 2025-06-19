@@ -1,6 +1,7 @@
 {
     "HomePage": {
-        "title": "Nhà hàng Smart Dine"
+        "title": "Nhà hàng Smart Dine",
+        "desc": "Vị ngon, trọn khoảnh khắc"
     },
     "LocaleSwitcher": {
         "vi": "Tiếng Việt",

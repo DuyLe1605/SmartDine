@@ -1,6 +1,7 @@
 {
     "HomePage": {
-        "title": "Smart Dine Restaurant"
+        "title": "Smart Dine Restaurant",
+        "desc": "Deliciousness, savoring the moment"
     },
     "LocaleSwitcher": {
         "vi": "Vietnamese",

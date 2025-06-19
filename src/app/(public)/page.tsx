@@ -33,7 +33,7 @@ export default async function Home() {
                 />
                 <div className="z-20 relative py-10 md:py-20 px-4 sm:px-10 md:px-20">
                     <h1 className="text-center text-xl sm:text-2xl md:text-4xl lg:text-5xl font-bold">{t("title")}</h1>
-                    <p className="text-center text-sm sm:text-base mt-4">Vị ngon, trọn khoảnh khắc</p>
+                    <p className="text-center text-sm sm:text-base mt-4">{t("desc")}</p>
                 </div>
             </div>
             <section className="space-y-10 py-16">
