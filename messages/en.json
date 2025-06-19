@@ -4,8 +4,7 @@
         "desc": "Deliciousness, savoring the moment"
     },
     "LocaleSwitcher": {
-        "vi": "Vietnamese",
-        "en": "English",
+        "locale": "{locale, select, vi {Vietnam} en {English} other {Unknown}}",
         "label": "Language"
     }
 }

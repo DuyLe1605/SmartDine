@@ -4,8 +4,7 @@
         "desc": "Vị ngon, trọn khoảnh khắc"
     },
     "LocaleSwitcher": {
-        "vi": "Tiếng Việt",
-        "en": "Tiếng Anh",
+        "locale": "{locale, select, vi {Tiếng Việt} en {Tiếng Anh} other {Unknown}}",
         "label": "Ngôn Ngữ"
     }
 }

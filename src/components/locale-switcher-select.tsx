@@ -6,30 +6,35 @@ import {
     DropdownMenuContent,
     DropdownMenuLabel,
     DropdownMenuRadioGroup,
-    DropdownMenuRadioItem,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Locale } from "@/i18n/config";
-import { setUserLocale } from "@/services/locale";
-import { CheckIcon, Languages } from "lucide-react";
-
-import { useTransition } from "react";
+import { Languages } from "lucide-react";
+import { useLocale } from "next-intl";
+import { useParams, usePathname, useRouter, useSearchParams } from "next/navigation";
 
 type Props = {
     value: string;
-    items: Array<{ value: string; label: string }>;
+    children: React.ReactNode;
     label: string;
 };
 
-export default function LocaleSwitcherSelect({ value, items, label }: Props) {
-    const [isPending, startTransition] = useTransition();
+export default function LocaleSwitcherSelect({ value, children, label }: Props) {
+    const router = useRouter();
+
+    const locale = useLocale();
+    const pathname = usePathname();
+    const params = useParams();
+    const searchParams = useSearchParams();
 
     function onChange(value: string) {
-        const locale = value as Locale;
-        startTransition(() => {
-            setUserLocale(locale);
-        });
+        const nextLocale = value as Locale;
+        console.log(pathname, params, searchParams, value, nextLocale);
+
+        const newPathname = pathname.replace(`/${locale}`, `/${value}`);
+        const fullUrl = `${newPathname}?${searchParams.toString()}`;
+        router.replace(fullUrl);
     }
 
     return (
@@ -44,11 +49,7 @@ export default function LocaleSwitcherSelect({ value, items, label }: Props) {
                 <DropdownMenuSeparator />
 
                 <DropdownMenuRadioGroup value={value} onValueChange={onChange}>
-                    {items.map((item) => (
-                        <DropdownMenuRadioItem key={item.value} value={item.value}>
-                            <span className="">{item.label}</span>
-                        </DropdownMenuRadioItem>
-                    ))}
+                    {children}
                 </DropdownMenuRadioGroup>
             </DropdownMenuContent>
         </DropdownMenu>

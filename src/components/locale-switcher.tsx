@@ -1,4 +1,6 @@
 import LocaleSwitcherSelect from "@/components/locale-switcher-select";
+import { DropdownMenuRadioItem } from "@/components/ui/dropdown-menu";
+import { routing } from "@/i18n/routing";
 import { useLocale, useTranslations } from "next-intl";
 
 export default function LocaleSwitcher() {
@@ -6,19 +8,15 @@ export default function LocaleSwitcher() {
     const locale = useLocale();
 
     return (
-        <LocaleSwitcherSelect
-            value={locale}
-            items={[
-                {
-                    value: "en",
-                    label: t("en"),
-                },
-                {
-                    value: "vi",
-                    label: t("vi"),
-                },
-            ]}
-            label={t("label")}
-        />
+        <LocaleSwitcherSelect value={locale} label={t("label")}>
+            {routing.locales.map((cur) => (
+                // <option key={cur} value={cur}>
+                //     {t("locale", { locale: cur })}
+                // </option>
+                <DropdownMenuRadioItem key={cur} value={cur}>
+                    <span className="">{t("locale", { locale: cur })}</span>
+                </DropdownMenuRadioItem>
+            ))}
+        </LocaleSwitcherSelect>
     );
 }
