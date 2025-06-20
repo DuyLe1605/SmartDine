@@ -16,3 +16,6 @@ trang thai bàn trong quản lí bàn ăn đang hiển thị sai ?
 
 sửa các lỗi cảnh báo khi build
  
+
+ laau lâu vào bị lỗi còn mỗi refreshToken trong côkie, các file cần check :middlewware chỗ refresh token, refreshToken component,page refreshToken. và xem chỗ nào xóa hết token trong ls đi. thêm biện pháp an toàn ở trong refresh token vì khi trong ls k có token,nó sẽ không logout ra và sẽ cứ ở mãi page refreshToken
+ sẽ có status code là 16
