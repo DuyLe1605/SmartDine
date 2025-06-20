@@ -46,6 +46,7 @@ export default function GuestLoginForm() {
             setRole(loginRes.payload.data.guest.role);
             setSocket(generateSocketInstance(loginRes.payload.data.accessToken));
             router.push("/guest/menu");
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
             handleErrorApi({ error, setError: form.setError });
         }

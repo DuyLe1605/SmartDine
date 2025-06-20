@@ -4,9 +4,12 @@ import { DishListResType } from "@/schemaValidations/dish.schema";
 import Image from "next/image";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from "@/i18n/navigation";
-import { getTranslations } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
+import { Locale } from "@/i18n/config";
 
-export default async function Home() {
+export default async function Home({ params }: { params: Promise<{ locale: Locale }> }) {
+    const { locale } = await params;
+    setRequestLocale(locale);
     // I18N
     const t = await getTranslations("HomePage");
 
@@ -15,6 +18,7 @@ export default async function Home() {
         const result = await dishApiRequest.list();
         const { data } = result.payload;
         dishList = data;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
         console.error(error.message ?? "Có lỗi xảy ra");
     }

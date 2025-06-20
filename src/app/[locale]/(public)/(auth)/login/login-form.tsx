@@ -10,18 +10,20 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useLoginMutation } from "@/queries/useAuth";
 import { toast } from "sonner";
 import { handleErrorApi } from "@/lib/utils";
-import { useSearchParams } from "next/navigation";
 import useAppStore from "@/zustand/useAppStore";
 import { useEffect } from "react";
 import { generateSocketInstance } from "@/lib/socket";
 import envConfig from "@/config";
 import { Link, useRouter } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
+import SearchParamsLoader, { useSearchParamsLoader } from "@/components/search-params-loader";
 
 export default function LoginForm() {
+    const t = useTranslations("Login");
     const loginMutation = useLoginMutation();
     const router = useRouter();
-    const searchParams = useSearchParams();
-    const clearToken = searchParams.get("clearToken");
+    const { searchParams, setSearchParams } = useSearchParamsLoader();
+    const clearToken = searchParams?.get("clearToken");
     const setRole = useAppStore((state) => state.setRole);
     const setSocket = useAppStore((state) => state.setSocket);
 
@@ -69,14 +71,16 @@ export default function LoginForm() {
 
             // setIsAuth(true);
             toast.success(result.payload.message);
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
             handleErrorApi({ error, setError: form.setError });
         }
     };
     return (
         <Card className="mx-auto  w-100 max-w-sm">
+            <SearchParamsLoader onParamsReceived={setSearchParams} />
             <CardHeader>
-                <CardTitle className="text-2xl">Đăng nhập</CardTitle>
+                <CardTitle className="text-2xl">{t("title")}</CardTitle>
                 <CardDescription>Nhập email và mật khẩu của bạn để đăng nhập vào hệ thống</CardDescription>
             </CardHeader>
             <CardContent>

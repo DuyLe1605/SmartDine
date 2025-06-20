@@ -8,6 +8,7 @@ import { hasLocale, NextIntlClientProvider } from "next-intl";
 
 import { routing } from "@/i18n/routing";
 import { notFound } from "next/navigation";
+import { setRequestLocale } from "next-intl/server";
 
 const roboto = Roboto({
     subsets: ["vietnamese", "latin"],
@@ -18,6 +19,9 @@ export const metadata: Metadata = {
     description: "The best restaurant in the world",
 };
 
+export function generateStaticParams() {
+    return routing.locales.map((locale) => ({ locale }));
+}
 export default async function RootLayout({
     children,
     params,
@@ -27,9 +31,11 @@ export default async function RootLayout({
 }) {
     const resolvedParams = await params;
     const { locale } = resolvedParams;
+
     if (!hasLocale(routing.locales, locale)) {
         notFound();
     }
+    setRequestLocale(locale);
     return (
         <html lang={locale} suppressHydrationWarning>
             <body className={`${roboto.className} antialiased`}>

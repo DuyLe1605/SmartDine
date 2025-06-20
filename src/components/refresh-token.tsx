@@ -17,7 +17,7 @@ export default function RefreshToken() {
     const socket = useAppStore((state) => state.socket);
     const setRole = useAppStore((state) => state.setRole);
     const disconnectSocket = useAppStore((state) => state.disconnectSocket);
-    console.log(pathname);
+
     useEffect(() => {
         if (UNAUTHENTICATED_PATHS.includes(pathname)) return;
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -76,7 +76,7 @@ export default function RefreshToken() {
         // Ví dụ thời gian hết hạn access token là 10s thì 1s mình sẽ cho check 1 lần
         // vì server backend quy định thời gian hết hạn là 15p (có thể chỉnh) nên mình sẽ check 3p 1 lần
         // const TIMEOUT = 1000 * 60 * 3;
-        const TIMEOUT = 1000 * 3;
+        const TIMEOUT = 1000 * 60 * 3;
 
         interval = setInterval(onRefreshToken, TIMEOUT);
 

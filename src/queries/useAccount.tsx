@@ -7,6 +7,7 @@ import {
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 // Truyền thêm unique key để có thể tránh caching
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const useAccountMe = (body: { uniqueKey?: any; onSuccess?: (data: AccountResType) => void }) =>
     useQuery({
         queryKey: ["account-me", body.uniqueKey],

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import envConfig from "@/config";
 import {
     clearTokensFormLS,
@@ -28,6 +29,7 @@ export class HttpError extends Error {
     status: number;
     payload: {
         message: string;
+
         [key: string]: any;
     };
     constructor({ status, payload, message = "Lỗi HTTP" }: { status: number; payload: any; message?: string }) {

@@ -155,6 +155,7 @@ function AlertDialogDeleteAccount({
                 const res = await mutateAsync(employeeDelete.id);
                 setEmployeeDelete(null);
                 toast(res.payload.message);
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
             } catch (error: any) {
                 handleErrorApi(error);
             }

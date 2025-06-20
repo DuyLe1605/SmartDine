@@ -9,12 +9,12 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Locale } from "@/i18n/config";
+
 import { Languages } from "lucide-react";
 import { useLocale } from "next-intl";
 
 // Chỗ này nên giữ nguyên, không nên đổi sang dùng ở thu mục i18n vì sẽ bị lỗi
-import { useParams, usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 type Props = {
     value: string;
@@ -27,13 +27,10 @@ export default function LocaleSwitcherSelect({ value, children, label }: Props) 
 
     const locale = useLocale();
     const pathname = usePathname();
-    const params = useParams();
+
     const searchParams = useSearchParams();
 
     function onChange(value: string) {
-        const nextLocale = value as Locale;
-        console.log(pathname, params, searchParams, value, nextLocale);
-
         const newPathname = pathname.replace(`/${locale}`, `/${value}`);
         const fullUrl = `${newPathname}?${searchParams.toString()}`;
         router.replace(fullUrl);

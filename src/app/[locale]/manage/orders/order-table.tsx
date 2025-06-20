@@ -81,7 +81,7 @@ export default function OrderTable() {
     const orderListRefetch = getOrderListQuery.refetch;
     // Mutation
     const updateOrderMutation = useUpdateOrderMutation();
-
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const tableListSortedByNumber = tableList.sort((a: any, b: any) => a.number - b.number);
     const [sorting, setSorting] = useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);

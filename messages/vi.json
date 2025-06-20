@@ -6,5 +6,8 @@
     "LocaleSwitcher": {
         "locale": "{locale, select, vi {Tiếng Việt} en {Tiếng Anh} other {Unknown}}",
         "label": "Ngôn Ngữ"
+    },
+    "Login": {
+        "title": "Đăng nhập"
     }
 }

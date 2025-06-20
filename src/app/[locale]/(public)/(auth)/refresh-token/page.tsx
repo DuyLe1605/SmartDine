@@ -37,6 +37,7 @@ function RefreshToken() {
                         disconnectSocket();
                         router.push("/");
                         toast("Bạn bị logout do lỗi không xác định,hãy báo admin về bug này (STATUS_CODE:16)");
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     } catch (error: any) {
                         console.error(error);
                         handleErrorApi({ error });

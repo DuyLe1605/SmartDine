@@ -11,6 +11,7 @@ function Logout() {
     const { mutateAsync } = useLogoutMutation();
     const searchParams = useSearchParams();
     const router = useRouter();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const mutateRef = useRef<any>(null);
     const refreshTokenFromUrl = searchParams.get("refreshToken");
     const accessTokenFromUrl = searchParams.get("accessToken");

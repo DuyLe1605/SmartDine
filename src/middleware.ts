@@ -48,7 +48,7 @@ export function middleware(request: NextRequest) {
     // Đăng nhập rồi
     if (refreshToken) {
         const role = decodeToken(refreshToken).role;
-        console.log(role, refreshToken);
+
         // Đăng nhập rồi thì không cho vào trang login nữa
         if (authPaths.some((path) => pathname.startsWith(path))) {
             return NextResponse.redirect(new URL(`/${locale}`, request.url));

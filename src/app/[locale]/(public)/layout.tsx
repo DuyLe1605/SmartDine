@@ -5,14 +5,27 @@ import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTr
 import ThemeToggle from "@/components/theme-toggle";
 import NavItems from "@/app/[locale]/(public)/nav-items";
 import LocaleSwitcher from "@/components/locale-switcher";
+import { hasLocale } from "next-intl";
+import { routing } from "@/i18n/routing";
+import { notFound } from "next/navigation";
+import { setRequestLocale } from "next-intl/server";
 
-export default function Layout({
+export default async function Layout({
     children,
     modal,
+    params,
 }: Readonly<{
     children: React.ReactNode;
     modal: React.ReactNode;
+    params: Promise<{ locale: string }>;
 }>) {
+    const { locale } = await params;
+    if (!hasLocale(routing.locales, locale)) {
+        notFound();
+    }
+
+    // Enable static rendering
+    setRequestLocale(locale);
     return (
         <div className="flex min-h-screen w-full flex-col relative">
             <header className="sticky z-20 top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
