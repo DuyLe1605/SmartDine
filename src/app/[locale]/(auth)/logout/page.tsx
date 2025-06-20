@@ -39,7 +39,7 @@ function Logout() {
             disconnectSocket();
             router.push("/login");
         });
-    }, [mutateAsync, refreshTokenFromUrl, router]);
+    }, [mutateAsync, refreshTokenFromUrl, router, accessTokenFromUrl, disconnectSocket, setRole]);
     return null;
 }
 

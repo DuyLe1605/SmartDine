@@ -62,7 +62,7 @@ export default function EditOrder({
             const body: { orderId: number } & UpdateOrderBodyType = { orderId: id as number, ...values };
             await updateOrderMutation.mutateAsync(body);
             reset();
-            onSubmitSuccess && onSubmitSuccess();
+            if (onSubmitSuccess) onSubmitSuccess();
         } catch (error) {
             handleErrorApi({ error, setError: form.setError });
         }
@@ -131,7 +131,7 @@ export default function EditOrder({
                                                     {...field}
                                                     value={field.value}
                                                     onChange={(e) => {
-                                                        let value = e.target.value;
+                                                        const value = e.target.value;
                                                         const numberValue = Number(value);
                                                         if (isNaN(numberValue)) {
                                                             return;

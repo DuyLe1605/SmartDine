@@ -1,7 +1,9 @@
+// eslint.config.mjs
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 import { FlatCompat } from "@eslint/eslintrc";
-import pluginQuery from "@tanstack/eslint-plugin-query"; // 👈 thêm dòng này
+import pluginQuery from "@tanstack/eslint-plugin-query";
+import prettier from "eslint-config-prettier";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -11,20 +13,28 @@ const compat = new FlatCompat({
 });
 
 const eslintConfig = [
-    ...compat.extends("next/core-web-vitals", "next/typescript"),
+    // Kế thừa cấu hình ESLint của Next.js + TypeScript
+    ...compat.extends("next/core-web-vitals", "next", "next/typescript", "prettier"),
 
-    // 👇 cấu hình ESLint plugin cho TanStack Query
+    // TanStack Query rules
     ...pluginQuery.configs["flat/recommended"],
 
-    // 👇 nếu muốn tùy chỉnh rule, bạn có thể thêm thêm block này:
+    // Tắt các rule xung đột với Prettier
+    prettier,
+
+    // Tùy chỉnh rules
     {
         rules: {
+            // TanStack Query
             "@tanstack/query/exhaustive-deps": "error",
-            "@tanstack/query/no-deprecated-options": "error",
-            "@tanstack/query/prefer-query-object-syntax": "warn",
+
             "@tanstack/query/stable-query-client": "error",
+
+            // Cơ bản
+            "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
+
+            "react/react-in-jsx-scope": "off", // không cần import React trong Next.js
         },
     },
 ];
-
 export default eslintConfig;

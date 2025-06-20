@@ -70,8 +70,10 @@ export const saveRefreshTokenToLS = (refreshToken: string) =>
     isClient && localStorage.setItem("refreshToken", refreshToken);
 
 export const clearTokensFormLS = () => {
-    isClient && localStorage.removeItem("accessToken");
-    isClient && localStorage.removeItem("refreshToken");
+    if (isClient) {
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+    }
 };
 
 export const checkAndRefreshToken = async (params?: {

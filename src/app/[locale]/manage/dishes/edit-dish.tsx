@@ -84,7 +84,7 @@ export default function EditDish({
             const res = await updateDishMutation.mutateAsync(body);
             await revalidateApiRequest("dishes");
             reset();
-            onSubmitSuccess && onSubmitSuccess();
+            if (onSubmitSuccess) onSubmitSuccess();
             toast.success(res.payload.message);
         } catch (error) {
             handleErrorApi({ error, setError: form.setError });

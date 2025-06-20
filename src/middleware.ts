@@ -48,7 +48,7 @@ export function middleware(request: NextRequest) {
     // Đăng nhập rồi
     if (refreshToken) {
         const role = decodeToken(refreshToken).role;
-
+        console.log(role, refreshToken);
         // Đăng nhập rồi thì không cho vào trang login nữa
         if (authPaths.some((path) => pathname.startsWith(path))) {
             return NextResponse.redirect(new URL(`/${locale}`, request.url));
@@ -61,7 +61,6 @@ export function middleware(request: NextRequest) {
             const url = new URL(`/${locale}/refresh-token`, request.url);
             url.searchParams.set("refreshToken", refreshToken);
             url.searchParams.set("redirect", pathname);
-            console.log("pathname:", "/manage/dashboard");
             return NextResponse.redirect(url);
             // response.headers.set("x-middleware-rewrite", url.toString());
             // return response;

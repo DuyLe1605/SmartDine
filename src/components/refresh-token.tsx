@@ -20,6 +20,7 @@ export default function RefreshToken() {
     console.log(pathname);
     useEffect(() => {
         if (UNAUTHENTICATED_PATHS.includes(pathname)) return;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         let interval: any = null;
 
         //     // Không nên đưa logic lấy access và refresh token ra khỏi cái function `checkAndRefreshToken`
@@ -75,8 +76,8 @@ export default function RefreshToken() {
         // Ví dụ thời gian hết hạn access token là 10s thì 1s mình sẽ cho check 1 lần
         // vì server backend quy định thời gian hết hạn là 15p (có thể chỉnh) nên mình sẽ check 3p 1 lần
         // const TIMEOUT = 1000 * 60 * 3;
-        // const TIMEOUT = 1000 * 60 * 3;
         const TIMEOUT = 1000 * 3;
+
         interval = setInterval(onRefreshToken, TIMEOUT);
 
         // Socket lắng nghe sự kiện refresh Token
@@ -115,6 +116,6 @@ export default function RefreshToken() {
             socket?.off("disconnect", onDisconnect);
             socket?.off("refresh-token", onRefreshTokenSocket);
         };
-    }, [pathname, router, socket, disconnectSocket]);
+    }, [pathname, router, socket, disconnectSocket, setRole]);
     return null;
 }

@@ -115,7 +115,7 @@ export default function OrderCart() {
             socket?.off("update-order", onUpdateOrder);
             socket?.off("payment", onPayment);
         };
-    }, [refetch, mutateAsync, setRole, router]);
+    }, [refetch, mutateAsync, setRole, router, disconnectSocket, socket]);
 
     return (
         <>

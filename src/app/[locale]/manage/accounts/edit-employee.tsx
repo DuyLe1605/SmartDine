@@ -103,7 +103,7 @@ export default function EditEmployee({
 
             toast.success(res.payload.message);
             reset();
-            onSubmitSuccess && onSubmitSuccess();
+            if (onSubmitSuccess) onSubmitSuccess();
         } catch (error) {
             handleErrorApi({ error, setError: form.setError });
         }

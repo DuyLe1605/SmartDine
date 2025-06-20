@@ -14,14 +14,17 @@ function RefreshToken() {
     const redirectPathname = searchParams.get("redirect");
 
     useEffect(() => {
+        console.log("refreshToken CPN");
         if (refreshTokenFromUrl && refreshTokenFromUrl === getRefreshTokenFromLs()) {
+            console.log("rt-component");
             checkAndRefreshToken({
                 onSuccess: () => {
                     router.push(redirectPathname || "/");
                 },
             });
+        } else {
         }
-    }, [refreshTokenFromUrl, router]);
+    }, [refreshTokenFromUrl, router, redirectPathname]);
 
     return <div className="text-center">Refreshing Token...</div>;
 }
