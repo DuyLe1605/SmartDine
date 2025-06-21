@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { CaretSortIcon, DotsHorizontalIcon } from "@radix-ui/react-icons";
@@ -46,6 +47,7 @@ import AutoPagination from "@/components/auto-pagination";
 import { useDeleteEmployee, useGetAccountList } from "@/queries/useAccount";
 import { decodeToken, getRefreshTokenFromLs, handleErrorApi } from "@/lib/utils";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
 type AccountItem = AccountListResType["data"][0];
 
@@ -155,7 +157,6 @@ function AlertDialogDeleteAccount({
                 const res = await mutateAsync(employeeDelete.id);
                 setEmployeeDelete(null);
                 toast(res.payload.message);
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
             } catch (error: any) {
                 handleErrorApi(error);
             }
@@ -173,12 +174,12 @@ function AlertDialogDeleteAccount({
         >
             <AlertDialogContent>
                 <AlertDialogHeader>
-                    <AlertDialogTitle>Xóa nhân viên?</AlertDialogTitle>
+                    <AlertDialogTitle>Xóa nhân viên ?</AlertDialogTitle>
                     <AlertDialogDescription>
-                        Tài khoản{" "}
+                        Tài khoản
                         <span className="bg-foreground text-primary-foreground rounded px-1">
                             {employeeDelete?.name}
-                        </span>{" "}
+                        </span>
                         sẽ bị xóa vĩnh viễn
                     </AlertDialogDescription>
                 </AlertDialogHeader>
@@ -193,6 +194,7 @@ function AlertDialogDeleteAccount({
 // Số lượng item trên 1 trang
 const PAGE_SIZE = 10;
 export default function AccountTable() {
+    const t = useTranslations("ManageAccounts.table");
     const searchParam = useSearchParams();
     const page = searchParam.get("page") ? Number(searchParam.get("page")) : 1;
     const pageIndex = page - 1;
@@ -296,8 +298,8 @@ export default function AccountTable() {
                 </div>
                 <div className="flex items-center justify-end space-x-2 py-4">
                     <div className="text-xs text-muted-foreground py-4 flex-1 ">
-                        Hiển thị <strong>{table.getPaginationRowModel().rows.length}</strong> trong{" "}
-                        <strong>{data.length}</strong> kết quả
+                        {t("show")} <strong>{table.getPaginationRowModel().rows.length}</strong> {t("of")}
+                        <strong>{data.length} </strong> {t("result")}
                     </div>
                     <div>
                         <AutoPagination

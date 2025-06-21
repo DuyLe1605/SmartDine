@@ -2,12 +2,25 @@ import ThemeToggle from "@/components/theme-toggle";
 import DropdownAvatar from "@/app/[locale]/manage/dropdown-avatar";
 import NavLinks from "@/app/[locale]/manage/nav-links";
 import MobileNavLinks from "@/app/[locale]/manage/mobile-nav-links";
+import { setRequestLocale } from "next-intl/server";
+import { notFound } from "next/navigation";
+import { hasLocale } from "next-intl";
+import { routing } from "@/i18n/routing";
 
-export default function Layout({
+export default async function Layout({
     children,
+    params,
 }: Readonly<{
     children: React.ReactNode;
+    params: Promise<{ locale: string }>;
 }>) {
+    const resolvedParams = await params;
+    const { locale } = resolvedParams;
+
+    if (!hasLocale(routing.locales, locale)) {
+        notFound();
+    }
+    setRequestLocale(locale);
     return (
         <div className="flex min-h-screen w-full flex-col bg-muted/40">
             <NavLinks />

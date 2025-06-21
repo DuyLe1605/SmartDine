@@ -1,13 +1,117 @@
 {
-    "HomePage": {
-        "title": "Smart Dine Restaurant",
-        "desc": "Deliciousness, savoring the moment"
+    "ErrorMessage": {
+        "invalidEmail": "Invalid email address",
+        "required": "This field is required",
+        "minMaxPassword": "Password must be between 6 and 100 characters"
     },
     "LocaleSwitcher": {
-        "locale": "{locale, select, vi {Vietnam} en {English} other {Unknown}}",
+        "locale": "{locale, select, vi {Vietnamese} en {English} other {Unknown}}",
         "label": "Language"
     },
+    "Brand": {
+        "title": "Smart Dine Restaurant",
+        "defaultTitle": "Smart Dine"
+    },
+    "HomePage": {
+        "title": "Smart Dine Restaurant",
+        "desc": "Delicious flavors, unforgettable moments",
+        "h2": "A wide variety of dishes",
+        "description": "Craving an authentic American dining experience? Smart Dine is your perfect destination! Savor our iconic, juicy Smart Dine burger, rich milkshakes, and crispy golden fries. Perfect for gatherings with family and friends!",
+        "slogan": "Delicious flavors, unforgettable moments"
+    },
     "Login": {
-        "title": "Sign in"
+        "title": "Sign In",
+        "description": "Manager access only",
+        "cardDescription": "Enter your email and password to sign in to the system",
+        "email": "Email Address",
+        "password": "Password",
+        "loginButton": "Sign In",
+        "googleLoginButton": "Sign in with Google",
+        "warning": "* If you're a guest, please scan the QR code on your table to log in"
+    },
+    "GuestLogin": {
+        "title": "Order Access",
+        "label": "Customer Name",
+        "button": "Start Ordering"
+    },
+    "DishDetail": {
+        "notFound": "The dish you selected does not exist"
+    },
+    "NavItem": {
+        "home": "Home",
+        "menu": "Menu",
+        "orders": "Orders",
+        "login": "Login",
+        "dashboard": "Admin Panel",
+        "logout": "Log out",
+        "logoutDialog": {
+            "alertTitle": "Are you sure you want to log out?",
+            "alertDescription": "Logging out may result in loss of your order data",
+            "cancel": "Cancel",
+            "confirm": "Log out"
+        }
+    },
+    "GuestMenu": {
+        "title": "Menu",
+        "description": "Welcome to SmartDine! Please choose your favorite dishes",
+        "orders": {
+            "outOfStock": "Out of Stock",
+            "order": "Order Now",
+            "item": "Item"
+        }
+    },
+    "GuestOrders": {
+        "title": "Your Order",
+        "description": "Here’s what you’ve ordered",
+        "cart": {
+            "noItem": "You haven’t ordered anything yet!",
+            "orderButton": "Tap to order now",
+            "unPaid": "Unpaid",
+            "paid": "Paid",
+            "total": "Total",
+            "item": "Item"
+        }
+    },
+    "ManageAccounts": {
+        "title": "Account Management",
+        "description": "Manage employee accounts",
+        "table": {
+            "show": "Showing",
+            "of": "of",
+            "result": "results"
+        }
+    },
+    "Dashboard": {
+        "title": "Dashboard",
+        "description": "View and analyze sales data"
+    },
+    "Dishes": {
+        "title": "Dishes",
+        "description": "Manage menu items"
+    },
+    "Orders": {
+        "title": "Orders",
+        "description": "Manage customer orders"
+    },
+    "Tables": {
+        "title": "Tables",
+        "description": "Manage dining tables"
+    },
+    "Setting": {
+        "title": "Settings",
+        "description": "Manage your account preferences",
+        "owner": "Account Owner",
+        "changePassword": {
+            "change": "Change Password",
+            "oldPass": "Current Password",
+            "newPass": "New Password",
+            "reEnterPass": "Confirm New Password"
+        },
+        "editInformation": {
+            "information": "Personal Information",
+            "name": "Name"
+        },
+        "cancel": "Cancel",
+        "confirm": "Save Changes"
     }
 }

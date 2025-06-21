@@ -11,8 +11,10 @@ import { useGuestOrderMutation } from "@/queries/useGuest";
 import { useRouter } from "@/i18n/navigation";
 import { toast } from "sonner";
 import Quantity from "@/app/[locale]/guest/menu/quantity";
+import { useTranslations } from "next-intl";
 
 export default function MenuOrder() {
+    const t = useTranslations("GuestMenu.orders");
     const router = useRouter();
     const { data } = useGetDishList();
     const dishes = data?.payload.data ?? [];
@@ -68,7 +70,7 @@ export default function MenuOrder() {
                         <div className="flex-shrink-0 relative ">
                             {dish.status === DishStatus.Unavailable && (
                                 <div className="absolute inset-0 z-10 bg-background/70 flex  items-center justify-center select-none rounded-md border-1 border-foreground">
-                                    <span className="text-foreground text-md font-bold ">Hết Hàng</span>
+                                    <span className="text-foreground text-md font-bold ">{t("outOfStock")}</span>
                                 </div>
                             )}
 
@@ -96,7 +98,9 @@ export default function MenuOrder() {
                 ))}
             <div className="sticky bottom-0">
                 <Button className="w-full justify-between" disabled={orders.length === 0} onClick={handleOrder}>
-                    <span>Gọi Đồ · {orders.length} món</span>
+                    <span>
+                        {t("order")} · {orders.length} {t("item")}
+                    </span>
                     <span>{formatCurrency(totalPrice)}</span>
                 </Button>
             </div>

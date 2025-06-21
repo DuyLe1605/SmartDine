@@ -14,8 +14,10 @@ import { Link } from "@/i18n/navigation";
 import { useRouter } from "@/i18n/navigation";
 import { useEffect } from "react";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
 export default function OrderCart() {
+    const t = useTranslations("GuestOrders.cart");
     const { data, refetch } = useGetGuestOrderListQuery();
     const setRole = useAppStore((state) => state.setRole);
     const disconnectSocket = useAppStore((state) => state.disconnectSocket);
@@ -80,7 +82,7 @@ export default function OrderCart() {
             refetch();
         }
 
-        function onPayment(data: PayGuestOrdersResType["data"]) {
+        function onPayment() {
             toast(
                 <div className="flex gap-2 items-center">
                     <CheckCircle className="h-5 w-5 text-green-500" />
@@ -148,24 +150,30 @@ export default function OrderCart() {
             <div className="sticky bottom-0">
                 {orders.length === 0 ? (
                     <div>
-                        <h2>Bạn chưa gọi món !</h2>
+                        <h2>{t("noItem")}</h2>
                         <Link href="/guest/menu">
-                            <Button> Bấm để gọi ngay</Button>
+                            <Button>{t("orderButton")}</Button>
                         </Link>
                     </div>
                 ) : (
                     <div className="bg-background/88 border-3 border-foreground/70 rounded-md  px-2 py-4">
                         <div className="w-full justify-between flex font-semibold text-xl">
-                            <p>Chưa thanh toán · {unPaid.quantity} món</p>
+                            <p>
+                                {t("unPaid")} · {unPaid.quantity} {t("item")}
+                            </p>
                             <p>{formatCurrency(unPaid.total)}</p>
                         </div>
                         <div className="w-full justify-between flex font-semibold text-xl">
-                            <p>Đã thanh toán · {paid.quantity} món</p>
+                            <p>
+                                {t("paid")} · {paid.quantity} {t("item")}
+                            </p>
                             <p>{formatCurrency(paid.total)}</p>
                         </div>
                         <div className="my-2 bg-white h-[1px] " />
                         <div className="w-full justify-between flex font-semibold text-xl">
-                            <p>Tổng cộng · {paid.quantity + unPaid.quantity} món</p>
+                            <p>
+                                {t("total")} · {paid.quantity + unPaid.quantity} {t("item")}
+                            </p>
                             <p>{formatCurrency(paid.total + unPaid.total)}</p>
                         </div>
                     </div>

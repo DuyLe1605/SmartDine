@@ -15,8 +15,10 @@ import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { useChangePasswordMutation } from "@/queries/useAccount";
 import { handleErrorApi, saveAccessTokenToLS, saveRefreshTokenToLS } from "@/lib/utils";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
 export default function ChangePasswordForm() {
+    const t = useTranslations("Setting");
     const changePasswordMutation = useChangePasswordMutation();
     const form = useForm<ChangePasswordBodyType>({
         resolver: zodResolver(ChangePasswordBody),
@@ -49,7 +51,7 @@ export default function ChangePasswordForm() {
             >
                 <Card className="overflow-hidden" x-chunk="dashboard-07-chunk-4">
                     <CardHeader>
-                        <CardTitle>Đổi mật khẩu</CardTitle>
+                        <CardTitle>{t("changePassword.change")}</CardTitle>
                         {/* <CardDescription>Lipsum dolor sit amet, consectetur adipiscing elit</CardDescription> */}
                     </CardHeader>
                     <CardContent>
@@ -60,7 +62,7 @@ export default function ChangePasswordForm() {
                                 render={({ field }) => (
                                     <FormItem>
                                         <div className="grid gap-3">
-                                            <Label htmlFor="oldPassword">Mật khẩu cũ</Label>
+                                            <Label htmlFor="oldPassword">{t("changePassword.oldPass")}</Label>
                                             <Input id="oldPassword" type="password" className="w-full" {...field} />
                                             <FormMessage />
                                         </div>
@@ -73,7 +75,7 @@ export default function ChangePasswordForm() {
                                 render={({ field }) => (
                                     <FormItem>
                                         <div className="grid gap-3">
-                                            <Label htmlFor="password">Mật khẩu mới</Label>
+                                            <Label htmlFor="password">{t("changePassword.newPass")}</Label>
                                             <Input id="password" type="password" className="w-full" {...field} />
                                             <FormMessage />
                                         </div>
@@ -86,7 +88,7 @@ export default function ChangePasswordForm() {
                                 render={({ field }) => (
                                     <FormItem>
                                         <div className="grid gap-3">
-                                            <Label htmlFor="confirmPassword">Nhập lại mật khẩu mới</Label>
+                                            <Label htmlFor="confirmPassword">{t("changePassword.reEnterPass")}</Label>
                                             <Input id="confirmPassword" type="password" className="w-full" {...field} />
                                             <FormMessage />
                                         </div>
@@ -95,9 +97,9 @@ export default function ChangePasswordForm() {
                             />
                             <div className=" items-center gap-2 md:ml-auto flex">
                                 <Button variant="outline" size="sm">
-                                    Hủy
+                                    {t("cancel")}
                                 </Button>
-                                <Button size="sm">Lưu thông tin</Button>
+                                <Button size="sm">{t("confirm")}</Button>
                             </div>
                         </div>
                     </CardContent>

@@ -20,7 +20,7 @@ export default function Quantity({ onChange, value }: Props) {
                 className="h-6 p-1 w-8"
                 value={value}
                 onChange={(e) => {
-                    let value = e.target.value;
+                    const value = e.target.value;
                     const numberValue = Number(value);
                     if (isNaN(numberValue)) {
                         return;

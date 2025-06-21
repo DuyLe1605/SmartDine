@@ -14,8 +14,10 @@ import { handleErrorApi } from "@/lib/utils";
 import useAppStore from "@/zustand/useAppStore";
 import { generateSocketInstance } from "@/lib/socket";
 import { useRouter } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 
 export default function GuestLoginForm() {
+    const t = useTranslations("GuestLogin");
     const router = useRouter();
     const searchParams = useSearchParams();
     const params = useParams();
@@ -55,7 +57,7 @@ export default function GuestLoginForm() {
     return (
         <Card className="mx-auto max-w-sm">
             <CardHeader>
-                <CardTitle className="text-2xl">Đăng nhập gọi món</CardTitle>
+                <CardTitle className="text-2xl">{t("title")}</CardTitle>
             </CardHeader>
             <CardContent>
                 <Form {...form}>
@@ -71,7 +73,7 @@ export default function GuestLoginForm() {
                                 render={({ field }) => (
                                     <FormItem>
                                         <div className="grid gap-2">
-                                            <Label htmlFor="name">Tên khách hàng</Label>
+                                            <Label htmlFor="name">{t("label")}</Label>
                                             <Input id="name" type="text" required {...field} />
                                             <FormMessage />
                                         </div>
@@ -80,7 +82,7 @@ export default function GuestLoginForm() {
                             />
 
                             <Button type="submit" className="w-full">
-                                Tiến hành gọi món
+                                {t("button")}
                             </Button>
                         </div>
                     </form>

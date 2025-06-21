@@ -86,12 +86,12 @@ export default function LoginForm() {
             <MagicCard gradientColor={theme === "dark" ? "#262626" : "#D9D9D955"} className="  py-10 ">
                 <CardHeader>
                     <CardTitle className="text-2xl">{t("title")}</CardTitle>
-                    <CardDescription>Nhập email và mật khẩu của bạn để đăng nhập vào hệ thống</CardDescription>
+                    <CardDescription>{t("cardDescription")}</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <Form {...form}>
                         <form
-                            className="space-y-2 max-w-[600px] flex-shrink-0 w-full"
+                            className="space-y-2 max-w-[600px] flex-shrink-0 w-full mt-5"
                             noValidate
                             onSubmit={form.handleSubmit(onSubmit)}
                         >
@@ -102,7 +102,7 @@ export default function LoginForm() {
                                     render={({ field }) => (
                                         <FormItem>
                                             <div className="grid gap-2">
-                                                <Label htmlFor="email">Email</Label>
+                                                <Label htmlFor="email">{t("email")}</Label>
                                                 <Input
                                                     id="email"
                                                     type="email"
@@ -122,7 +122,7 @@ export default function LoginForm() {
                                         <FormItem>
                                             <div className="grid gap-2">
                                                 <div className="flex items-center">
-                                                    <Label htmlFor="password">Password</Label>
+                                                    <Label htmlFor="password">{t("password")}</Label>
                                                 </div>
                                                 <Input id="password" type="password" required {...field} />
                                                 <FormMessage />
@@ -130,22 +130,20 @@ export default function LoginForm() {
                                         </FormItem>
                                     )}
                                 />
-                                <Button type="submit" className="w-full">
-                                    Đăng nhập
+                                <Button type="submit" className="w-full mt-2">
+                                    {t("loginButton")}
                                 </Button>
 
                                 <Link href={googleOauthUrl}>
                                     <Button variant="outline" className="w-full" type="button">
                                         <FcGoogle size={25} />
-                                        Đăng nhập bằng Google
+                                        {t("googleLoginButton")}
                                     </Button>
                                 </Link>
                             </div>
                         </form>
                     </Form>
-                    <p className="text-xs mt-4 text-foreground/40">
-                        * Nếu bạn là khách, hãy quét mã QR trên bàn ăn để đăng nhập
-                    </p>
+                    <p className="text-xs mt-4 text-foreground/40">{t("warning")}</p>
                 </CardContent>
             </MagicCard>
         </Card>

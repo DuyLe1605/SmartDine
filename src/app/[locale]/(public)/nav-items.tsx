@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { Role } from "@/constants/type";
@@ -20,6 +21,7 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { useTranslations } from "next-intl";
 
 const menuItems: {
     title: string;
@@ -28,32 +30,33 @@ const menuItems: {
     hiddenWhenLogin?: boolean;
 }[] = [
     {
-        title: "Trang chủ",
+        title: "home",
         href: "/",
     },
     {
-        title: "Món ăn",
+        title: "menu",
         href: "/guest/menu",
         role: [Role.Guest],
     },
     {
-        title: "Giỏ hàng",
+        title: "orders",
         href: "/guest/orders",
         role: [Role.Guest],
     },
     {
-        title: "Đăng nhập",
+        title: "login",
         href: "/login",
         hiddenWhenLogin: true,
     },
     {
-        title: "Quản lý",
+        title: "dashboard",
         href: "/manage/dashboard",
         role: [Role.Employee, Role.Owner],
     },
 ];
 
 export default function NavItems({ className }: { className?: string }) {
+    const t = useTranslations("NavItem");
     const logoutMutation = useLogoutMutation();
     const guestLogoutMutation = useGuestLogoutMutation();
     const router = useRouter();
@@ -72,7 +75,6 @@ export default function NavItems({ className }: { className?: string }) {
             router.push("/");
 
             toast.success(result.payload.message);
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
             console.error(error);
             handleErrorApi({ error });
@@ -89,7 +91,7 @@ export default function NavItems({ className }: { className?: string }) {
                 if (isAuth || canShow) {
                     return (
                         <Link href={item.href} key={item.href} className={className}>
-                            {item.title}
+                            {t(item.title as any)}
                         </Link>
                     );
                 }
@@ -98,16 +100,16 @@ export default function NavItems({ className }: { className?: string }) {
             {role && (
                 <AlertDialog>
                     <AlertDialogTrigger asChild>
-                        <button className={cn(className, "cursor-pointer")}>Đăng xuất</button>
+                        <button className={cn(className, "cursor-pointer")}>{t("logout")}</button>
                     </AlertDialogTrigger>
                     <AlertDialogContent>
                         <AlertDialogHeader>
-                            <AlertDialogTitle>Bạn có muốn đăng xuất hay không ?</AlertDialogTitle>
-                            <AlertDialogDescription>Nếu không muốn bạn có thể bấm quay lại</AlertDialogDescription>
+                            <AlertDialogTitle>{t("logoutDialog.alertTitle")}</AlertDialogTitle>
+                            <AlertDialogDescription>{t("logoutDialog.alertDescription")}</AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>
-                            <AlertDialogCancel>Quay Lại</AlertDialogCancel>
-                            <AlertDialogAction onClick={handleLogout}>Đăng xuất</AlertDialogAction>
+                            <AlertDialogCancel>{t("logoutDialog.cancel")}</AlertDialogCancel>
+                            <AlertDialogAction onClick={handleLogout}>{t("logoutDialog.confirm")}</AlertDialogAction>
                         </AlertDialogFooter>
                     </AlertDialogContent>
                 </AlertDialog>

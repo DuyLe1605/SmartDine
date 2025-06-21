@@ -1,13 +1,119 @@
 {
-    "HomePage": {
-        "title": "Nhà hàng Smart Dine",
-        "desc": "Vị ngon, trọn khoảnh khắc"
+    "ErrorMessage": {
+        "invalidEmail": "Email không hợp lệ",
+        "required": "Trường này không được để trống",
+        "minMaxPassword": "Mật khẩu phải từ 6 đến 100 ký tự"
     },
     "LocaleSwitcher": {
         "locale": "{locale, select, vi {Tiếng Việt} en {Tiếng Anh} other {Unknown}}",
         "label": "Ngôn Ngữ"
     },
+    "Brand": {
+        "title": "Nhà hàng Smart Dine",
+        "defaultTitle": " Smart Dine"
+    },
+    "HomePage": {
+        "title": "Nhà hàng Smart Dine",
+        "desc": "Vị ngon, trọn khoảnh khắc",
+        "h2": "Đa dạng các món ăn",
+        "description": "Khát khao một trải nghiệm ẩm thực Mỹ cổ điển? Smart Dine là lựa chọn hoàn hảo! Thưởng thức chiếc Smart Dine burger biểu tượng, thơm ngon và đậm đà, cùng với những ly milkshake béo ngậy và khoai tây chiên giòn tan. Hoàn hảo cho các buổi gặp mặt gia đình và bạn bè!",
+        "slogan": "Vị ngon, trọn khoảnh khắc"
+    },
+
     "Login": {
-        "title": "Đăng nhập"
+        "title": "Đăng nhập",
+        "description": "khu vực đăng nhập dành cho quản lí",
+        "cardDescription": "Nhập email và mật khẩu của bạn để đăng nhập vào hệ thống",
+        "email": "Tài khoản Email",
+        "password": "Mật khẩu",
+        "loginButton": "Đăng nhập",
+        "googleLoginButton": "Đăng nhập bằng Google",
+        "warning": "* Nếu bạn là khách, hãy quét mã QR trên bàn ăn để đăng nhập"
+    },
+    "GuestLogin": {
+        "title": "Đăng nhập gọi món",
+        "label": "Tên khách hàng",
+        "button": "Tiến hành gọi món"
+    },
+    "DishDetail": {
+        "notFound": "Món ăn bạn chọn không tồn tại"
+    },
+    "NavItem": {
+        "home": "Trang chủ",
+        "menu": "Món ăn",
+        "orders": "Đơn hàng",
+        "login": "Đăng nhập",
+        "dashboard": "Quản lý",
+        "logout": "Đăng xuất",
+        "logoutDialog": {
+            "alertTitle": "Bạn có muốn đăng xuất hay không ?",
+            "alertDescription": "Đăng xuất có thể dẫn đến mất dữ liệu đơn hàng của bạn",
+            "cancel": "Quay lại",
+            "confirm": "Đăng xuất"
+        }
+    },
+    "GuestMenu": {
+        "title": "Thực đơn",
+        "description": "Chào mừng đến với SmartDine, hãy chọn món ăn yêu thích của bạn",
+        "orders": {
+            "outOfStock": "Hết Hàng",
+            "order": "Gọi đồ",
+            "item": " Món"
+        }
+    },
+    "GuestOrders": {
+        "title": "Đơn hàng",
+        "description": "Đơn hàng của bạn",
+        "cart": {
+            "noItem": "Bạn chưa gọi món !",
+            "orderButton": "Bấm để gọi ngay",
+            "unPaid": "Chưa thanh toán ",
+            "paid": "Đã thanh toán ",
+            "total": "Tổng cộng ",
+            "item": " Món"
+        }
+    },
+    "ManageAccounts": {
+        "title": "Quản lý tài khoản",
+        "description": "Quản lý tài khoản nhân viên",
+        "table": {
+            "show": "Hiển thị",
+            "of": "trong",
+            "result": "Kết quả"
+        }
+    },
+
+    "Dashboard": {
+        "title": "Bảng điều khiển",
+        "description": "Xem và phân tích dữ liệu bán hàng"
+    },
+    "Dishes": {
+        "title": "Món ăn",
+        "description": "Quản lý món ăn"
+    },
+    "Orders": {
+        "title": "Đơn hàng",
+        "description": "Quản lý đơn hàng"
+    },
+    "Tables": {
+        "title": "Bàn ăn",
+        "description": "Quản lý bàn ăn"
+    },
+    "Setting": {
+        "title": "Cài đặt",
+        "description": "Quản lý cài đặt tài khoản của bạn",
+        "owner": "Chủ tài khoản",
+        "changePassword": {
+            "change": "Đổi mật khẩu",
+            "oldPass": "Mật khẩu cũ",
+            "newPass": "Mật khẩu mới",
+            "reEnterPass": "Nhập lại mật khẩu"
+        },
+        "editInformation": {
+            "information": "Thông tin cá ",
+            "name": "Tên"
+        },
+        "cancel": "Hủy",
+        "confirm": "Lưu thông tin"
     }
 }

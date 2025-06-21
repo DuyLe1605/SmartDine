@@ -41,7 +41,7 @@ export default async function Home({ params }: { params: Promise<{ locale: Local
                 </div>
             </div>
             <section className="space-y-10 py-16">
-                <h2 className="text-center text-2xl font-bold">Đa dạng các món ăn</h2>
+                <h2 className="text-center text-2xl font-bold">{t("h2")}</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-10">
                     {dishList &&
                         dishList.map((dish, index) => (
