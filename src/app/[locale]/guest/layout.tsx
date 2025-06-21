@@ -1,4 +1,5 @@
 import Layout from "@/app/[locale]/(public)/layout";
+import { Locale } from "@/i18n/config";
 import { routing } from "@/i18n/routing";
 import { hasLocale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
@@ -9,7 +10,7 @@ export default async function GuestLayout({
     params,
 }: {
     children: React.ReactNode;
-    params: Promise<{ locale: string }>;
+    params: Promise<{ locale: Locale }>;
 }) {
     const { locale } = await params;
     if (!hasLocale(routing.locales, locale)) {

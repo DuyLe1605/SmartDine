@@ -3,9 +3,15 @@
 import { checkAndRefreshToken, getRefreshTokenFromLs, handleErrorApi } from "@/lib/utils";
 import { useLogoutMutation } from "@/queries/useAuth";
 import useAppStore from "@/zustand/useAppStore";
+import { Metadata } from "next";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { toast } from "sonner";
+
+export const metadata: Metadata = {
+    title: "Refresh Token Redirect",
+    description: "Refresh Token Redirect",
+};
 
 export default function RefreshToken() {
     const searchParams = useSearchParams();

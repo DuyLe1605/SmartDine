@@ -13,7 +13,7 @@
         "defaultTitle": "Smart Dine"
     },
     "HomePage": {
-        "title": "Smart Dine Restaurant",
+        "title": "Home Page",
         "desc": "Delicious flavors, unforgettable moments",
         "h2": "A wide variety of dishes",
         "description": "Craving an authentic American dining experience? Smart Dine is your perfect destination! Savor our iconic, juicy Smart Dine burger, rich milkshakes, and crispy golden fries. Perfect for gatherings with family and friends!",
@@ -32,7 +32,8 @@
     "GuestLogin": {
         "title": "Order Access",
         "label": "Customer Name",
-        "button": "Start Ordering"
+        "button": "Start Ordering",
+        "description": "Enter your information to start ordering"
     },
     "DishDetail": {
         "notFound": "The dish you selected does not exist"

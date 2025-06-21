@@ -13,7 +13,7 @@
         "defaultTitle": " Smart Dine"
     },
     "HomePage": {
-        "title": "Nhà hàng Smart Dine",
+        "title": "Trang chủ",
         "desc": "Vị ngon, trọn khoảnh khắc",
         "h2": "Đa dạng các món ăn",
         "description": "Khát khao một trải nghiệm ẩm thực Mỹ cổ điển? Smart Dine là lựa chọn hoàn hảo! Thưởng thức chiếc Smart Dine burger biểu tượng, thơm ngon và đậm đà, cùng với những ly milkshake béo ngậy và khoai tây chiên giòn tan. Hoàn hảo cho các buổi gặp mặt gia đình và bạn bè!",
@@ -33,7 +33,8 @@
     "GuestLogin": {
         "title": "Đăng nhập gọi món",
         "label": "Tên khách hàng",
-        "button": "Tiến hành gọi món"
+        "button": "Tiến hành gọi món",
+        "description": "Nhập thông tin đăng nhập để thực hiện gọi món"
     },
     "DishDetail": {
         "notFound": "Món ăn bạn chọn không tồn tại"

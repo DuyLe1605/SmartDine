@@ -2,8 +2,14 @@ import { useRouter } from "@/i18n/navigation";
 import { getAccessTokenFromLs, getRefreshTokenFromLs } from "@/lib/utils";
 import { useLogoutMutation } from "@/queries/useAuth";
 import useAppStore from "@/zustand/useAppStore";
+import { Metadata } from "next";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useRef } from "react";
+
+export const metadata: Metadata = {
+    title: "Logout Redirect",
+    description: "Logout Redirect",
+};
 
 export default function Logout() {
     const { mutateAsync } = useLogoutMutation();

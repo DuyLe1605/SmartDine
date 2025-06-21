@@ -6,13 +6,14 @@ import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { hasLocale } from "next-intl";
 import { routing } from "@/i18n/routing";
+import { Locale } from "@/i18n/config";
 
 export default async function Layout({
     children,
     params,
 }: Readonly<{
     children: React.ReactNode;
-    params: Promise<{ locale: string }>;
+    params: Promise<{ locale: Locale }>;
 }>) {
     const resolvedParams = await params;
     const { locale } = resolvedParams;

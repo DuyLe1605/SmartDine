@@ -7,6 +7,15 @@ import { Link } from "@/i18n/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Locale } from "@/i18n/config";
 
+export async function generateMetadata({ params: { locale } }: { params: { locale: Locale } }) {
+    const t = await getTranslations({ locale, namespace: "HomePage" });
+
+    return {
+        title: t("title"),
+        description: t("description"),
+    };
+}
+
 export default async function Home({ params }: { params: Promise<{ locale: Locale }> }) {
     const { locale } = await params;
     setRequestLocale(locale);
