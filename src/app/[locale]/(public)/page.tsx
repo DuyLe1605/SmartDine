@@ -1,5 +1,5 @@
 import dishApiRequest from "@/apiRequests/dish";
-import { formatCurrency } from "@/lib/utils";
+import { formatCurrency, generateSlugUrl } from "@/lib/utils";
 import { DishListResType } from "@/schemaValidations/dish.schema";
 import Image from "next/image";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -44,13 +44,13 @@ export default async function Home({ params }: { params: Promise<{ locale: Local
                 <h2 className="text-center text-2xl font-bold">Đa dạng các món ăn</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-10">
                     {dishList &&
-                        dishList.map((item, index) => (
+                        dishList.map((dish, index) => (
                             <div className="flex gap-4 w" key={index}>
                                 <div className="flex-shrink-0">
-                                    <Link href={`/dishes/${item.id}`}>
+                                    <Link href={`/dishes/${generateSlugUrl({ name: dish.name, id: dish.id })}`}>
                                         <Image
-                                            src={item.image}
-                                            alt={item.name}
+                                            src={dish.image}
+                                            alt={dish.name}
                                             width={150}
                                             height={150}
                                             className="w-[150px] h-[150px] object-cover rounded-md"
@@ -58,9 +58,9 @@ export default async function Home({ params }: { params: Promise<{ locale: Local
                                     </Link>
                                 </div>
                                 <div className="space-y-1">
-                                    <h3 className="text-xl font-semibold">{item.name}</h3>
-                                    <p className="">{item.description}</p>
-                                    <p className="font-semibold">{formatCurrency(item.price)}</p>
+                                    <h3 className="text-xl font-semibold">{dish.name}</h3>
+                                    <p className="">{dish.description}</p>
+                                    <p className="font-semibold">{formatCurrency(dish.price)}</p>
                                 </div>
                             </div>
                         ))}

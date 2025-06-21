@@ -12,6 +12,7 @@ import { TokenPayload } from "@/types/jwt.types";
 import guestApiRequest from "@/apiRequests/guest";
 import { format } from "date-fns";
 import { BookX, CookingPot, HandCoins, Loader, Truck } from "lucide-react";
+import slugify from "slugify";
 
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
@@ -227,3 +228,8 @@ export const serverApiWrapper = async <T>(fn: () => Promise<T>) => {
     }
     return result;
 };
+
+export const generateSlugUrl = ({ name, id }: { name: string; id: number }) =>
+    `${slugify(name, { lower: true, strict: true, locale: "vi" })}-i.${id}`;
+
+export const getIdFromSlugUr = (slug: string) => Number(slug.split(`-i.`)[1]);

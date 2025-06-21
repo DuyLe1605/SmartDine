@@ -17,9 +17,13 @@ import envConfig from "@/config";
 import { Link, useRouter } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
 import SearchParamsLoader, { useSearchParamsLoader } from "@/components/search-params-loader";
+import { MagicCard } from "@/components/magicui/magic-card";
+import { useTheme } from "next-themes";
+import { FcGoogle } from "react-icons/fc";
 
 export default function LoginForm() {
     const t = useTranslations("Login");
+    const { theme } = useTheme();
     const loginMutation = useLoginMutation();
     const router = useRouter();
     const { searchParams, setSearchParams } = useSearchParamsLoader();
@@ -77,70 +81,73 @@ export default function LoginForm() {
         }
     };
     return (
-        <Card className="mx-auto  w-100 max-w-sm">
+        <Card className="mx-auto p-0 w-100 max-w-sm">
             <SearchParamsLoader onParamsReceived={setSearchParams} />
-            <CardHeader>
-                <CardTitle className="text-2xl">{t("title")}</CardTitle>
-                <CardDescription>Nhập email và mật khẩu của bạn để đăng nhập vào hệ thống</CardDescription>
-            </CardHeader>
-            <CardContent>
-                <Form {...form}>
-                    <form
-                        className="space-y-2 max-w-[600px] flex-shrink-0 w-full"
-                        noValidate
-                        onSubmit={form.handleSubmit(onSubmit)}
-                    >
-                        <div className="grid gap-4">
-                            <FormField
-                                control={form.control}
-                                name="email"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <div className="grid gap-2">
-                                            <Label htmlFor="email">Email</Label>
-                                            <Input
-                                                id="email"
-                                                type="email"
-                                                placeholder="m@example.com"
-                                                required
-                                                {...field}
-                                            />
-                                            <FormMessage />
-                                        </div>
-                                    </FormItem>
-                                )}
-                            />
-                            <FormField
-                                control={form.control}
-                                name="password"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <div className="grid gap-2">
-                                            <div className="flex items-center">
-                                                <Label htmlFor="password">Password</Label>
+            <MagicCard gradientColor={theme === "dark" ? "#262626" : "#D9D9D955"} className="  py-10 ">
+                <CardHeader>
+                    <CardTitle className="text-2xl">{t("title")}</CardTitle>
+                    <CardDescription>Nhập email và mật khẩu của bạn để đăng nhập vào hệ thống</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <Form {...form}>
+                        <form
+                            className="space-y-2 max-w-[600px] flex-shrink-0 w-full"
+                            noValidate
+                            onSubmit={form.handleSubmit(onSubmit)}
+                        >
+                            <div className="grid gap-4">
+                                <FormField
+                                    control={form.control}
+                                    name="email"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <div className="grid gap-2">
+                                                <Label htmlFor="email">Email</Label>
+                                                <Input
+                                                    id="email"
+                                                    type="email"
+                                                    placeholder="m@example.com"
+                                                    required
+                                                    {...field}
+                                                />
+                                                <FormMessage />
                                             </div>
-                                            <Input id="password" type="password" required {...field} />
-                                            <FormMessage />
-                                        </div>
-                                    </FormItem>
-                                )}
-                            />
-                            <Button type="submit" className="w-full">
-                                Đăng nhập
-                            </Button>
-
-                            <Link href={googleOauthUrl}>
-                                <Button variant="outline" className="w-full" type="button">
-                                    Đăng nhập bằng Google
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="password"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <div className="grid gap-2">
+                                                <div className="flex items-center">
+                                                    <Label htmlFor="password">Password</Label>
+                                                </div>
+                                                <Input id="password" type="password" required {...field} />
+                                                <FormMessage />
+                                            </div>
+                                        </FormItem>
+                                    )}
+                                />
+                                <Button type="submit" className="w-full">
+                                    Đăng nhập
                                 </Button>
-                            </Link>
-                        </div>
-                    </form>
-                </Form>
-                <p className="text-xs mt-4 text-foreground/40">
-                    * Nếu bạn là khách, hãy quét mã QR trên bàn ăn để đăng nhập
-                </p>
-            </CardContent>
+
+                                <Link href={googleOauthUrl}>
+                                    <Button variant="outline" className="w-full" type="button">
+                                        <FcGoogle size={25} />
+                                        Đăng nhập bằng Google
+                                    </Button>
+                                </Link>
+                            </div>
+                        </form>
+                    </Form>
+                    <p className="text-xs mt-4 text-foreground/40">
+                        * Nếu bạn là khách, hãy quét mã QR trên bàn ăn để đăng nhập
+                    </p>
+                </CardContent>
+            </MagicCard>
         </Card>
     );
 }

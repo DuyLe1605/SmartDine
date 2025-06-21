@@ -1,17 +1,18 @@
 import dishApiRequest from "@/apiRequests/dish";
-import DishModal from "@/app/[locale]/(public)/@modal/(.)dishes/[id]/dish-modal";
+import DishModal from "@/app/[locale]/(public)/@modal/(.)dishes/[slug]/dish-modal";
 
-import { formatCurrency, serverApiWrapper } from "@/lib/utils";
+import { formatCurrency, getIdFromSlugUr, serverApiWrapper } from "@/lib/utils";
 import Image from "next/image";
 
 interface Props {
     params: Promise<{
-        id: string;
+        slug: string;
     }>;
 }
 
 export default async function InterceptingDishPage({ params }: Props) {
-    const { id } = await params;
+    const { slug } = await params;
+    const id = getIdFromSlugUr(slug);
     const data = await serverApiWrapper(() => dishApiRequest.getDish(Number(id)));
     const dish = data?.payload.data;
 
