@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -23,6 +24,7 @@ import { FcGoogle } from "react-icons/fc";
 
 export default function LoginForm() {
     const t = useTranslations("Login");
+    const errorMessageT = useTranslations("ErrorMessage");
     const { theme } = useTheme();
     const loginMutation = useLoginMutation();
     const router = useRouter();
@@ -75,7 +77,6 @@ export default function LoginForm() {
 
             // setIsAuth(true);
             toast.success(result.payload.message);
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
             handleErrorApi({ error, setError: form.setError });
         }
@@ -99,7 +100,7 @@ export default function LoginForm() {
                                 <FormField
                                     control={form.control}
                                     name="email"
-                                    render={({ field }) => (
+                                    render={({ field, formState: { errors } }) => (
                                         <FormItem>
                                             <div className="grid gap-2">
                                                 <Label htmlFor="email">{t("email")}</Label>
@@ -110,7 +111,10 @@ export default function LoginForm() {
                                                     required
                                                     {...field}
                                                 />
-                                                <FormMessage />
+                                                <FormMessage>
+                                                    {Boolean(errors.email?.message) &&
+                                                        errorMessageT(errors.email?.message as any)}
+                                                </FormMessage>
                                             </div>
                                         </FormItem>
                                     )}
@@ -118,14 +122,17 @@ export default function LoginForm() {
                                 <FormField
                                     control={form.control}
                                     name="password"
-                                    render={({ field }) => (
+                                    render={({ field, formState: { errors } }) => (
                                         <FormItem>
                                             <div className="grid gap-2">
                                                 <div className="flex items-center">
                                                     <Label htmlFor="password">{t("password")}</Label>
                                                 </div>
                                                 <Input id="password" type="password" required {...field} />
-                                                <FormMessage />
+                                                <FormMessage>
+                                                    {Boolean(errors.password?.message) &&
+                                                        errorMessageT(errors.password?.message as any)}
+                                                </FormMessage>
                                             </div>
                                         </FormItem>
                                     )}
