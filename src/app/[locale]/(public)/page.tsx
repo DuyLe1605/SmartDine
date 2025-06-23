@@ -9,7 +9,8 @@ import { Locale } from "@/i18n/config";
 import envConfig from "@/config";
 import { baseOpenGraph } from "@/sharedMetadata";
 
-export async function generateMetadata({ params: { locale } }: { params: { locale: Locale } }) {
+export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }) {
+    const { locale } = await params;
     const t = await getTranslations({ locale, namespace: "HomePage" });
 
     const url = (localeInput: Locale) => `${envConfig.NEXT_PUBLIC_URL}/${localeInput}`;
