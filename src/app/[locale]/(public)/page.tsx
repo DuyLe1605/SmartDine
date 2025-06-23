@@ -6,13 +6,29 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from "@/i18n/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Locale } from "@/i18n/config";
+import envConfig from "@/config";
+import { baseOpenGraph } from "@/sharedMetadata";
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: Locale } }) {
     const t = await getTranslations({ locale, namespace: "HomePage" });
 
+    const url = (localeInput: Locale) => `${envConfig.NEXT_PUBLIC_URL}/${localeInput}`;
     return {
         title: t("title"),
         description: t("description"),
+        openGraph: {
+            ...baseOpenGraph,
+            title: t("title"),
+            description: t("description"),
+            url: url(locale),
+        },
+        alternates: {
+            canonical: url(locale),
+            languages: {
+                en: url("en"),
+                vi: url("vi"),
+            },
+        },
     };
 }
 

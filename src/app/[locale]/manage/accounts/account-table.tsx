@@ -203,7 +203,7 @@ export default function AccountTable() {
     const [employeeDelete, setEmployeeDelete] = useState<AccountItem | null>(null);
     const accountListQuery = useGetAccountList();
     const data = accountListQuery.data?.payload.data ?? [];
-
+    console.log(data);
     const [sorting, setSorting] = useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});

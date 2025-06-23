@@ -1,7 +1,9 @@
 import dishApiRequest from "@/apiRequests/dish";
 import DishDetail from "@/app/[locale]/(public)/dishes/[slug]/dish-detail";
+import envConfig from "@/config";
 import { Locale } from "@/i18n/config";
-import { getIdFromSlugUr, serverApiWrapper } from "@/lib/utils";
+import { generateSlugUrl, getIdFromSlugUr, serverApiWrapper } from "@/lib/utils";
+import { baseOpenGraph } from "@/sharedMetadata";
 import { getTranslations } from "next-intl/server";
 
 interface Props {
@@ -22,9 +24,25 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
             description: t("notFound"),
         };
     }
+    const url = (localeInput: Locale) =>
+        `${envConfig.NEXT_PUBLIC_URL}/${localeInput}/dishes/${generateSlugUrl({ name: dish.name, id: dish.id })}`;
+
     return {
         title: dish.name,
         description: dish.description,
+        openGraph: {
+            ...baseOpenGraph,
+            title: dish.name,
+            description: dish.description,
+            url: url(locale),
+        },
+        alternates: {
+            canonical: url(locale),
+            languages: {
+                en: url("en"),
+                vi: url("vi"),
+            },
+        },
     };
 }
 
