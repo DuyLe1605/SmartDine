@@ -12,8 +12,9 @@ const nextConfig: NextConfig = {
     images: {
         remotePatterns: [
             {
+                protocol: "http",
                 hostname: "localhost",
-                pathname: "/**",
+                port: "4000",
             },
             {
                 hostname: "api-bigboy.duthanhduoc.com",

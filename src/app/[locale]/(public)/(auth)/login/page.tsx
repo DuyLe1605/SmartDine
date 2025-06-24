@@ -1,5 +1,4 @@
 import LoginForm from "@/app/[locale]/(public)/(auth)/login/login-form";
-import { WavyBackgroundDemo } from "@/app/[locale]/(public)/(auth)/login/wavy";
 import envConfig from "@/config";
 import { Locale } from "@/i18n/config";
 import { baseOpenGraph } from "@/sharedMetadata";

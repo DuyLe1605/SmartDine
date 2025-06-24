@@ -11,6 +11,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Locale } from "@/i18n/config";
 import type { Viewport } from "next";
 import NextTopLoader from "nextjs-toploader";
+import Footer from "@/components/footer";
 
 const roboto = Roboto({
     subsets: ["vietnamese", "latin"],
@@ -85,6 +86,7 @@ export default async function RootLayout({
                     <AppProvider>
                         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
                             {children}
+                            <Footer />
                             <Toaster />
                         </ThemeProvider>
                     </AppProvider>
