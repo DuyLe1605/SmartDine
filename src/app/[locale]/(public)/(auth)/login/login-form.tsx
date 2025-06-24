@@ -10,7 +10,7 @@ import { LoginBody, LoginBodyType } from "@/schemaValidations/auth.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useLoginMutation } from "@/queries/useAuth";
 import { toast } from "sonner";
-import { handleErrorApi } from "@/lib/utils";
+import { cn, handleErrorApi } from "@/lib/utils";
 import useAppStore from "@/zustand/useAppStore";
 import { useEffect } from "react";
 import { generateSocketInstance } from "@/lib/socket";
@@ -21,6 +21,8 @@ import SearchParamsLoader, { useSearchParamsLoader } from "@/components/search-p
 import { MagicCard } from "@/components/magicui/magic-card";
 import { useTheme } from "next-themes";
 import { FcGoogle } from "react-icons/fc";
+import { LoaderCircle } from "lucide-react";
+import { WavyBackground } from "@/components/ui/wavy-background";
 
 export default function LoginForm() {
     const t = useTranslations("Login");
@@ -82,77 +84,90 @@ export default function LoginForm() {
         }
     };
     return (
-        <Card className="mx-auto p-0 w-100 max-w-sm">
-            <SearchParamsLoader onParamsReceived={setSearchParams} />
-            <MagicCard gradientColor={theme === "dark" ? "#262626" : "#D9D9D955"} className="  py-10 ">
-                <CardHeader>
-                    <CardTitle className="text-2xl">{t("title")}</CardTitle>
-                    <CardDescription>{t("cardDescription")}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <Form {...form}>
-                        <form
-                            className="space-y-2 max-w-[600px] flex-shrink-0 w-full mt-5"
-                            noValidate
-                            onSubmit={form.handleSubmit(onSubmit)}
-                        >
-                            <div className="grid gap-4">
-                                <FormField
-                                    control={form.control}
-                                    name="email"
-                                    render={({ field, formState: { errors } }) => (
-                                        <FormItem>
-                                            <div className="grid gap-2">
-                                                <Label htmlFor="email">{t("email")}</Label>
-                                                <Input
-                                                    id="email"
-                                                    type="email"
-                                                    placeholder="m@example.com"
-                                                    required
-                                                    {...field}
-                                                />
-                                                <FormMessage>
-                                                    {Boolean(errors.email?.message) &&
-                                                        errorMessageT(errors.email?.message as any)}
-                                                </FormMessage>
-                                            </div>
-                                        </FormItem>
-                                    )}
-                                />
-                                <FormField
-                                    control={form.control}
-                                    name="password"
-                                    render={({ field, formState: { errors } }) => (
-                                        <FormItem>
-                                            <div className="grid gap-2">
-                                                <div className="flex items-center">
-                                                    <Label htmlFor="password">{t("password")}</Label>
+        <WavyBackground className="max-w-4xl mx-auto ">
+            <Card className="mx-auto p-0 w-100 max-w-sm">
+                <SearchParamsLoader onParamsReceived={setSearchParams} />
+                <MagicCard gradientColor={theme === "dark" ? "#262626" : "#D9D9D955"} className="  py-10 ">
+                    <CardHeader>
+                        <CardTitle className="text-2xl">{t("title")}</CardTitle>
+                        <CardDescription>{t("cardDescription")}</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <Form {...form}>
+                            <form
+                                className="space-y-2 max-w-[600px] flex-shrink-0 w-full mt-5"
+                                noValidate
+                                onSubmit={form.handleSubmit(onSubmit)}
+                            >
+                                <div className="grid gap-4">
+                                    <FormField
+                                        control={form.control}
+                                        name="email"
+                                        render={({ field, formState: { errors } }) => (
+                                            <FormItem>
+                                                <div className="grid gap-2">
+                                                    <Label htmlFor="email">{t("email")}</Label>
+                                                    <Input
+                                                        id="email"
+                                                        type="email"
+                                                        placeholder="m@example.com"
+                                                        required
+                                                        {...field}
+                                                    />
+                                                    <FormMessage>
+                                                        {Boolean(errors.email?.message) &&
+                                                            errorMessageT(errors.email?.message as any)}
+                                                    </FormMessage>
                                                 </div>
-                                                <Input id="password" type="password" required {...field} />
-                                                <FormMessage>
-                                                    {Boolean(errors.password?.message) &&
-                                                        errorMessageT(errors.password?.message as any)}
-                                                </FormMessage>
-                                            </div>
-                                        </FormItem>
-                                    )}
-                                />
-                                <Button type="submit" className="w-full mt-2">
-                                    {t("loginButton")}
-                                </Button>
-
-                                <Link href={googleOauthUrl}>
-                                    <Button variant="outline" className="w-full" type="button">
-                                        <FcGoogle size={25} />
-                                        {t("googleLoginButton")}
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <FormField
+                                        control={form.control}
+                                        name="password"
+                                        render={({ field, formState: { errors } }) => (
+                                            <FormItem>
+                                                <div className="grid gap-2">
+                                                    <div className="flex items-center">
+                                                        <Label htmlFor="password">{t("password")}</Label>
+                                                    </div>
+                                                    <Input id="password" type="password" required {...field} />
+                                                    <FormMessage>
+                                                        {Boolean(errors.password?.message) &&
+                                                            errorMessageT(errors.password?.message as any)}
+                                                    </FormMessage>
+                                                </div>
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <Button type="submit" className="w-full mt-2 ">
+                                        <span className="relative">
+                                            <LoaderCircle
+                                                className={cn(
+                                                    "w-4 h-4 top-1/2 left-[-20px] -translate-y-1/2 absolute",
+                                                    {
+                                                        "opacity-100 visible animate-spin": loginMutation.isPending,
+                                                        "opacity-0 invisible": !loginMutation.isPending,
+                                                    }
+                                                )}
+                                            />
+                                            {t("loginButton")}
+                                        </span>
                                     </Button>
-                                </Link>
-                            </div>
-                        </form>
-                    </Form>
-                    <p className="text-xs mt-4 text-foreground/40">{t("warning")}</p>
-                </CardContent>
-            </MagicCard>
-        </Card>
+
+                                    <Link href={googleOauthUrl}>
+                                        <Button variant="outline" className="w-full" type="button">
+                                            <FcGoogle size={25} />
+                                            {t("googleLoginButton")}
+                                        </Button>
+                                    </Link>
+                                </div>
+                            </form>
+                        </Form>
+                        <p className="text-xs mt-4 text-foreground/40">{t("warning")}</p>
+                    </CardContent>
+                </MagicCard>
+            </Card>
+        </WavyBackground>
     );
 }

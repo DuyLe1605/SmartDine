@@ -1,4 +1,5 @@
 import LoginForm from "@/app/[locale]/(public)/(auth)/login/login-form";
+import { WavyBackgroundDemo } from "@/app/[locale]/(public)/(auth)/login/wavy";
 import envConfig from "@/config";
 import { Locale } from "@/i18n/config";
 import { baseOpenGraph } from "@/sharedMetadata";
@@ -30,7 +31,7 @@ export default function Login({ params }: { params: Promise<{ locale: Locale }> 
     setRequestLocale(locale);
 
     return (
-        <div className="min-h-screen flex items-center justify-center">
+        <div className="h-[80vh] flex items-center justify-center">
             <LoginForm />
         </div>
     );

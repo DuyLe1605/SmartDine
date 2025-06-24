@@ -10,6 +10,7 @@ import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Locale } from "@/i18n/config";
 import type { Viewport } from "next";
+import NextTopLoader from "nextjs-toploader";
 
 const roboto = Roboto({
     subsets: ["vietnamese", "latin"],
@@ -79,6 +80,7 @@ export default async function RootLayout({
     return (
         <html lang={locale} suppressHydrationWarning>
             <body className={`${roboto.className} antialiased`}>
+                <NextTopLoader showSpinner={false} height={3} />
                 <NextIntlClientProvider>
                     <AppProvider>
                         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
