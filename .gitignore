@@ -42,5 +42,3 @@ next-env.d.ts
 # Ignore tất cả file bắt đầu bằng .env
 .env*
 
-# Nhưng giữ lại file .env
-!.env
