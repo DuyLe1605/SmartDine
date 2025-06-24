@@ -8,6 +8,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Locale } from "@/i18n/config";
 import envConfig from "@/config";
 import { baseOpenGraph } from "@/sharedMetadata";
+import { htmlToTextForDescription } from "@/lib/serverUtils";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }) {
     const { locale } = await params;
@@ -20,7 +21,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
         openGraph: {
             ...baseOpenGraph,
             title: t("title"),
-            description: t("description"),
+
+            description: htmlToTextForDescription(t("description")),
             url: url(locale),
         },
         alternates: {

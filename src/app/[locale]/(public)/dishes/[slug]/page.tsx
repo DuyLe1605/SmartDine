@@ -2,6 +2,7 @@ import dishApiRequest from "@/apiRequests/dish";
 import DishDetail from "@/app/[locale]/(public)/dishes/[slug]/dish-detail";
 import envConfig from "@/config";
 import { Locale } from "@/i18n/config";
+import { htmlToTextForDescription } from "@/lib/serverUtils";
 import { generateSlugUrl, getIdFromSlugUr, serverApiWrapper } from "@/lib/utils";
 import { baseOpenGraph } from "@/sharedMetadata";
 import { getTranslations } from "next-intl/server";
@@ -21,7 +22,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
     if (!dish) {
         return {
             title: t("notFound"),
-            description: t("notFound"),
+            description: htmlToTextForDescription(t("notFound")),
         };
     }
     const url = (localeInput: Locale) =>
