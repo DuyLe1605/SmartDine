@@ -15,7 +15,7 @@ import { Link } from "@/i18n/navigation";
 import { useEffect } from "react";
 import { useGetTable, useUpdateTableMutation } from "@/queries/useTable";
 import { toast } from "sonner";
-import { QrCode } from "lucide-react";
+
 import QrCodeTable from "@/components/qrcode-table";
 
 export default function EditTable({
@@ -61,7 +61,7 @@ export default function EditTable({
 
             // Cho Cập nhật lại dữ liệu của form
             reset();
-            onSubmitSuccess && onSubmitSuccess();
+            if (onSubmitSuccess) onSubmitSuccess();
             toast(result.payload.message);
         } catch (error) {
             handleErrorApi({ error, setError: form.setError });

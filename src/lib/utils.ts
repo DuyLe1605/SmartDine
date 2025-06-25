@@ -13,6 +13,7 @@ import guestApiRequest from "@/apiRequests/guest";
 import { format } from "date-fns";
 import { BookX, CookingPot, HandCoins, Loader, Truck } from "lucide-react";
 import slugify from "slugify";
+import { defaultLocale } from "@/i18n/config";
 
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
@@ -185,7 +186,7 @@ export const getVietnameseTableStatus = (status: (typeof TableStatus)[keyof type
 };
 
 export const getTableLink = ({ token, tableNumber }: { token: string; tableNumber: number }) => {
-    return envConfig.NEXT_PUBLIC_URL + "/tables/" + tableNumber + "?token=" + token;
+    return envConfig.NEXT_PUBLIC_URL + `/${defaultLocale}/tables/` + tableNumber + "?token=" + token;
 };
 
 export const decodeToken = (token: string) => jwt.decode(token) as TokenPayload;
