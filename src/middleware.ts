@@ -65,6 +65,35 @@ export function middleware(request: NextRequest) {
             // response.headers.set("x-middleware-rewrite", url.toString());
             // return response;
         }
+        // Ngăn cho Guest không truy cập được vào trang quản lí
+        // Ngăn quản lí hoặc nhân viên vào trang của khách hàng
+        const isGuestGoToManagePaths = managePaths.some((path) => pathname.startsWith(path)) && role === Role.Guest;
+        const isNotGuestGoToGuestPaths = guestPaths.some((path) => pathname.startsWith(path)) && role !== Role.Guest;
+        const isNotOwnerGoToOwnerPaths =
+            onlyOwnerPaths.some((path) => pathname.startsWith(path)) && role !== Role.Owner;
+
+        if (isGuestGoToManagePaths || isNotGuestGoToGuestPaths || isNotOwnerGoToOwnerPaths) {
+            return NextResponse.redirect(new URL(`/${locale}`, request.url));
+            // const url = new URL("/", request.url);
+            // response.headers.set("x-middleware-rewrite", url.toString());
+            // return response;
+        }
+
+        if (pathname === `/${locale}/manage`) {
+            return NextResponse.redirect(new URL(`/${locale}/manage/dashboard`, request.url));
+            // const url = new URL("/manage/dashboard", request.url);
+            // response.headers.set("x-middleware-rewrite", url.toString());
+            // return response;
+        }
+        if (pathname === `/${locale}/guest`) {
+            return NextResponse.redirect(new URL(`/${locale}/guest/menu`, request.url));
+            // const url = new URL("/guest/menu", request.url);
+            // response.headers.set("x-middleware-rewrite", url.toString());
+            // return response;
+        }
+
+        // return NextResponse.next();
+        return response;
     }
 
     // Nếu không nhảy vào if ở trên,cũng phải trả về 1 cái response
