@@ -41,5 +41,6 @@ next-env.d.ts
 # env files (can opt-in for committing if needed)
 # Ignore tất cả file bắt đầu bằng .env
 .env*
-.env
+
+!.env
 

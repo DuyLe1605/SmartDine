@@ -3,7 +3,10 @@ import createNextIntlPlugin from "next-intl/plugin";
 
 const nextConfig: NextConfig = {
     experimental: {
-        reactCompiler: true,
+        reactCompiler: {
+            compilationMode: "annotation",
+        },
+        // reactCompiler: true,
     },
     eslint: {
         dirs: ["pages", "utils"], // Only run ESLint on the 'pages' and 'utils' directories during production builds (next build)
